@@ -16,6 +16,8 @@ import predator
 import shore
 import game.world
 
+import game.modes.death.mode
+
 class SwimMode(game.Mode):
 
     def __init__(self, g):
@@ -34,6 +36,9 @@ class SwimMode(game.Mode):
 
         around_start = lambda e: (e.position - self.swarm.position).length > c.START_SAFEZONE
         self.predators = [ p for p in self.predators if around_start(p)]
+
+    def die(self, message="All your fishies are dead :("):
+        self.game.mode = game.modes.death.mode.DeathMode(self.game, self, message)
 
     def fill_sector(self, x, y):
 
@@ -86,6 +91,12 @@ class SwimMode(game.Mode):
         self.depth = game.world.depth((x,y))
 
 
+        self.distance_travelled = 0
+        self.food_eaten = 0
+        self.fishies_spawned = c.START_FISHES
+        self.fishies_max = c.START_FISHES
+
+
     def get_sector(self, e):
         return (
             int(math.floor(e.position.x / c.SECTOR_SIZE[0])) + c.START_SECTOR[0],
@@ -108,6 +119,10 @@ class SwimMode(game.Mode):
 
         for p in self.predators:
             p.update(time_elapsed)
+
+
+        if not self.swarm.fishes:
+            self.die()
 
     def render(self):
 

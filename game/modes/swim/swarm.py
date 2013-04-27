@@ -12,7 +12,7 @@ class Swarm(game.PhysicsEntity):
         super(Swarm, self).__init__(mode, position, direction, max_velocity=c.SWARM_MAX_VELOCITY, velocity_decay=c.SWARM_VELOCITY_DECAY)
 
         self.target_position = position
-
+        self.last_pos = position
 
         self.fishes = [fish.Fish(self, position +  u.random_dir() * fish_radius, u.random_dir()) for _ in range(initial_fishes)]
 
@@ -22,6 +22,9 @@ class Swarm(game.PhysicsEntity):
     def update(self, time_elapsed):
         game.PhysicsEntity.update(self, time_elapsed)
         self.direction = self.velocity * 100
+
+        self.mode.distance_travelled += (self.last_pos - self.position).length
+        self.last_pos = self.position
 
         for f in self.fishes:
             f.update(time_elapsed)

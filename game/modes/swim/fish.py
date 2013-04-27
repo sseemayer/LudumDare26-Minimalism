@@ -26,6 +26,9 @@ class Fish(game.PhysicsEntity):
 
         if self.food >= c.FISH_BABY_THRESHOLD:
             self.modify_food(-c.FISH_BABY_FOOD)
+
+            self.mode.fishies_spawned += 1
+            self.mode.fishies_max = max(self.mode.fishies_max, len(self.swarm.fishes))
             self.swarm.fishes.append(Fish(self.swarm, self.position))
 
     def apply_force(self):
@@ -62,6 +65,7 @@ class Fish(game.PhysicsEntity):
                 go_to_swarm = m.VECTOR_NULL
                 closest_food.nutrition_value -= 1
                 self.modify_food(1)
+                self.mode.food_eaten += 1
 
                 if closest_food.nutrition_value <= 0:
                     self.mode.foods.remove(closest_food)
