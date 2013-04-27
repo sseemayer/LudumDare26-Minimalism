@@ -29,6 +29,5 @@ class Camera(game.PhysicsEntity):
         u.draw_text(self.mode.game.screen, m.VECTOR_Y * 40, "MouseS: {}".format(self.mode.game.mouse_pos))
 
         u.draw_cross(self.mode.game.screen, self.mode.mouse_pos_world - self.position)
-        u.draw_cross(self.mode.game.screen, self.offset, color=(255, 255, 255))
 
         pass

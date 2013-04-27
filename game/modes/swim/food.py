@@ -8,7 +8,7 @@ import fish
 
 class Food(game.PhysicsEntity):
 
-    def __init__(self, mode, position=m.Vector(0, 0), direction=m.Vector(0, 0), nutrition_value=10):
+    def __init__(self, mode, position=m.Vector(0, 0), direction=m.Vector(0, 0), nutrition_value=c.FOOD_NUTRITION_VALUE):
         super(Food, self).__init__(mode, position, direction)
 
         self.nutrition_value = nutrition_value

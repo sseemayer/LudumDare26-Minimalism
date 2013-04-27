@@ -12,7 +12,7 @@ class Fish(game.PhysicsEntity):
         super(Fish, self).__init__(swarm.mode, position, direction, max_velocity=c.FISH_MAX_VELOCITY, max_angular_velocity=c.FISH_MAX_ANGULAR_VELOCITY, velocity_decay=c.FISH_VELOCITY_DECAY, angular_velocity_decay=c.FISH_ANGULAR_VELOCITY_DECAY)
 
         self.swarm = swarm
-        self.food = 0
+        self.food = c.FISH_BABY_FOOD
 
     def apply_force(self):
 
@@ -81,8 +81,9 @@ class Fish(game.PhysicsEntity):
     def update(self, time_elapsed):
         game.PhysicsEntity.update(self, time_elapsed)
         self.direction = m.Vector(math.cos(self.angle), math.sin(self.angle)) * 10
+        self.food -= c.FISH_STARVATION * time_elapsed
 
-        if self.food >= c.FISH_BABY_FOOD:
+        if self.food >= 2 * c.FISH_BABY_FOOD:
             self.food -= c.FISH_BABY_FOOD
             self.swarm.fishes.append(Fish(self.swarm, self.position))
 

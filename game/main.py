@@ -14,6 +14,7 @@ class Game(object):
         pygame.init()
         self.screen = pygame.display.set_mode(c.SCREEN_DIMENSIONS.as_tuple())
         pygame.display.set_caption(c.GAME_TITLE)
+        pygame.mouse.set_visible(False)
 
         self.running = True
         self.mode = swim.SwimMode(self)
