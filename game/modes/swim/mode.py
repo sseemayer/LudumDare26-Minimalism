@@ -5,9 +5,11 @@ import py2d.Math as m
 import game
 import game.constants as c
 import game.util as u
+
 import swarm
 import camera
 import food
+import predator
 
 class SwimMode(game.Mode):
 
@@ -18,7 +20,9 @@ class SwimMode(game.Mode):
         self.camera = camera.Camera(self)
         self.mouse_pos_world = self.swarm.position
 
-        self.foods = [food.Food(self, m.VECTOR_X * x * 100 + u.random_dir() * 30 ) for x in range(5, 10)]
+        self.foods = [food.Food(self, m.VECTOR_X * x * 10 + u.random_dir() * 30 ) for x in range(50, 100)]
+
+        self.predators = [predator.Predator(self, m.VECTOR_X * 100 + m.VECTOR_Y * y * 100 + u.random_dir() * 30 ) for y in range(3, 10)]
 
     def update(self, time_elapsed):
         self.camera.update(time_elapsed)
@@ -27,6 +31,9 @@ class SwimMode(game.Mode):
 
 
         self.swarm.update(time_elapsed)
+
+        for p in self.predators:
+            p.update(time_elapsed)
 
 
     def render(self):
@@ -40,3 +47,6 @@ class SwimMode(game.Mode):
 
         for f in self.foods:
             f.render()
+
+        for p in self.predators:
+            p.render()

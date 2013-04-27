@@ -26,6 +26,15 @@ def angle_steer(current, target):
     else:
         return -right
 
+def draw_line(surface, x0, x1, color=(255, 0, 0)):
+    pygame.draw.line(
+        surface,
+        color,
+        x0.as_tuple(),
+        x1.as_tuple(),
+    )
+
+
 def draw_cross(surface, pos, color=(255, 0, 0), radius=3):
     pygame.draw.line(
         surface,

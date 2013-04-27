@@ -15,6 +15,19 @@ class Fish(game.PhysicsEntity):
         self.swarm = swarm
         self.food = c.FISH_BABY_FOOD
 
+    def modify_food(self, delta):
+        self.food += delta
+
+        if self.food <= 0:
+            self.mode.foods.append(food.Food(self.mode, self.position, nutrition_value = c.FOOD_NUTRITION_VALUE_CORPSE))
+
+            if self in self.swarm.fishes:
+                self.swarm.fishes.remove(self)
+
+        if self.food >= c.FISH_BABY_THRESHOLD:
+            self.modify_food(-c.FISH_BABY_FOOD)
+            self.swarm.fishes.append(Fish(self.swarm, self.position))
+
     def apply_force(self):
 
         # behavior:
@@ -48,7 +61,7 @@ class Fish(game.PhysicsEntity):
             if go_to_swarm.length < c.FISH_EAT_DISTANCE:
                 go_to_swarm = m.VECTOR_NULL
                 closest_food.nutrition_value -= 1
-                self.food += 1
+                self.modify_food(1)
 
                 if closest_food.nutrition_value <= 0:
                     self.mode.foods.remove(closest_food)
@@ -82,15 +95,8 @@ class Fish(game.PhysicsEntity):
     def update(self, time_elapsed):
         game.PhysicsEntity.update(self, time_elapsed)
         self.direction = m.Vector(math.cos(self.angle), math.sin(self.angle)) * 10
-        self.food -= c.FISH_STARVATION * time_elapsed
+        self.modify_food(-c.FISH_STARVATION * time_elapsed)
 
-        if self.food <= 0:
-            self.swarm.fishes.remove(self)
-            self.mode.foods.append(food.Food(self.mode, self.position, nutrition_value = c.FOOD_NUTRITION_VALUE_CORPSE))
-
-        if self.food >= c.FISH_BABY_THRESHOLD:
-            self.food -= c.FISH_BABY_FOOD
-            self.swarm.fishes.append(Fish(self.swarm, self.position))
 
     def render(self):
         scr = self.mode.game.screen
