@@ -10,3 +10,5 @@ class Mode(object):
     def render(self):
         pass
 
+    def click(self):
+        pass

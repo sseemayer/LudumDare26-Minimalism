@@ -6,8 +6,8 @@ import collections
 
 import game
 import game.constants as c
-import game.modes.swim
-import game.modes.worldmap
+
+import game.modes.menu.mode
 
 import py2d.Math as m
 
@@ -20,7 +20,8 @@ class Game(object):
         pygame.mouse.set_visible(False)
 
         self.running = True
-        self.mode = game.modes.swim.mode.SwimMode(self)
+        self.mode = game.modes.menu.mode.MenuMode(self)
+
         self.clock = pygame.time.Clock()
 
         self.mouse_pos = m.Vector(0, 0)
@@ -46,6 +47,10 @@ class Game(object):
                 if event.type == MOUSEMOTION:
                     self.mouse_pos.x = event.pos[0]
                     self.mouse_pos.y = event.pos[1]
+
+                if event.type == MOUSEBUTTONDOWN:
+                    if event.button == 1 and self.mode:
+                        self.mode.click()
 
                 if event.type == QUIT:
                     self.running = False
