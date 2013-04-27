@@ -88,7 +88,7 @@ class Fish(game.PhysicsEntity):
             self.swarm.fishes.remove(self)
             self.mode.foods.append(food.Food(self.mode, self.position, nutrition_value = c.FOOD_NUTRITION_VALUE_CORPSE))
 
-        if self.food >= 2 * c.FISH_BABY_FOOD:
+        if self.food >= c.FISH_BABY_THRESHOLD:
             self.food -= c.FISH_BABY_FOOD
             self.swarm.fishes.append(Fish(self.swarm, self.position))
 
