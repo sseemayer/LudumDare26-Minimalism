@@ -2,9 +2,12 @@ import pygame
 from pygame.locals import *
 
 import sys
+import collections
 
+import game
 import game.constants as c
-import game.modes.swim as swim
+import game.modes.swim
+import game.modes.worldmap
 
 import py2d.Math as m
 
@@ -17,10 +20,15 @@ class Game(object):
         pygame.mouse.set_visible(False)
 
         self.running = True
-        self.mode = swim.SwimMode(self)
+        self.mode = game.modes.swim.mode.SwimMode(self)
         self.clock = pygame.time.Clock()
 
         self.mouse_pos = m.Vector(0, 0)
+
+        self.keys = collections.defaultdict(bool)
+
+    def die(self, swim_mode, message="All your fishies are dead :("):
+        self.mode = game.modes.death.mode.DeathMode(self, swim_mode, message)
 
     def loop(self):
 
@@ -29,6 +37,12 @@ class Game(object):
             time_elapsed = self.clock.tick(c.TARGET_FPS)
 
             for event in pygame.event.get():
+                if event.type == KEYDOWN:
+                    self.keys[event.key] = True
+
+                if event.type == KEYUP:
+                    self.keys[event.key] = False
+
                 if event.type == MOUSEMOTION:
                     self.mouse_pos.x = event.pos[0]
                     self.mouse_pos.y = event.pos[1]

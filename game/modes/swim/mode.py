@@ -23,6 +23,14 @@ class SwimMode(game.Mode):
     def __init__(self, g):
         game.Mode.__init__(self, g)
 
+
+        self.sector_history = []
+        self.distance_travelled = 0
+        self.food_eaten = 0
+        self.fishies_spawned = c.START_FISHES
+        self.fishies_max = c.START_FISHES
+
+
         self.swarm = swarm.Swarm(self, c.SECTOR_SIZE / 2)
         self.camera = camera.Camera(self, position = self.swarm.position-c.SCREEN_DIMENSIONS/2)
         self.mouse_pos_world = self.swarm.position
@@ -37,8 +45,7 @@ class SwimMode(game.Mode):
         around_start = lambda e: (e.position - self.swarm.position).length > c.START_SAFEZONE
         self.predators = [ p for p in self.predators if around_start(p)]
 
-    def die(self, message="All your fishies are dead :("):
-        self.game.mode = game.modes.death.mode.DeathMode(self.game, self, message)
+
 
     def fill_sector(self, x, y):
 
@@ -90,12 +97,7 @@ class SwimMode(game.Mode):
         self.color = game.world.WORLD.get_at((x, y))
         self.depth = game.world.depth((x,y))
 
-
-        self.distance_travelled = 0
-        self.food_eaten = 0
-        self.fishies_spawned = c.START_FISHES
-        self.fishies_max = c.START_FISHES
-
+        self.sector_history.append((x, y))
 
     def get_sector(self, e):
         return (
@@ -122,7 +124,7 @@ class SwimMode(game.Mode):
 
 
         if not self.swarm.fishes:
-            self.die()
+            self.game.die(self)
 
     def render(self):
 

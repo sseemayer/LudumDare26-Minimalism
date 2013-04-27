@@ -3,6 +3,7 @@ import game.util as u
 import game.constants as c
 
 import py2d.Math as m
+import math
 
 import fish
 
@@ -23,4 +24,4 @@ class Food(game.PhysicsEntity):
     def render(self):
         scr = self.mode.game.screen
         cam = self.mode.camera.position
-        u.draw_cross(scr, self.position - cam, color=(255, 255, 0))
+        u.draw_cross(scr, self.position - cam, color=(255, 255, 0), radius = math.sqrt(self.nutrition_value))

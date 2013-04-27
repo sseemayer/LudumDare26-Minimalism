@@ -16,6 +16,9 @@ import game.world
 import pyhiero.pygamefont as pgf
 import glyph
 
+
+import game.modes.worldmap.mode
+
 class DeathMode(game.Mode):
 
     def __init__(self, g, swim_mode, message):
@@ -37,9 +40,11 @@ class DeathMode(game.Mode):
         self.surf_game_over = self.header_font.render("Game Over")
         self.surf_message = self.main_font.render(self.message)
 
+        self.surf_keys = self.main_font.render("(L): Travel Log, (R): Retry", color=(255,0,0))
+
         overlay_pos = c.SCREEN_DIMENSIONS / 2 - c.GAMEOVER_DIMENSIONS / 2
 
-        g_rect = pygame.Rect((overlay_pos[0], overlay_pos[1] + 200), (c.GAMEOVER_DIMENSIONS.x, c.GAMEOVER_DIMENSIONS.y - 200 ))
+        g_rect = pygame.Rect((overlay_pos[0], overlay_pos[1] + 200), (c.GAMEOVER_DIMENSIONS.x, c.GAMEOVER_DIMENSIONS.y - 250 ))
 
         stats = {
             "distance": self.swim_mode.distance_travelled,
@@ -56,7 +61,12 @@ class DeathMode(game.Mode):
 
 
     def update(self, time_elapsed):
-        pass
+
+        if self.game.keys[K_l]:
+            self.game.mode = game.modes.worldmap.mode.WorldmapMode(self.game, self.swim_mode)
+
+        if self.game.keys[K_r]:
+            self.game.mode = game.modes.swim.mode.SwimMode(self.game)
 
     def render(self):
 
@@ -73,3 +83,4 @@ class DeathMode(game.Mode):
         scr.blit(self.surf_message, m.Vector(c.SCREEN_DIMENSIONS.x / 2 - self.surf_message.get_width() / 2, overlay_pos.y + 150).as_tuple())
         scr.blit(self.g_stats.image, m.Vector(c.SCREEN_DIMENSIONS.x / 2 - self.g_stats.image.get_width() / 2, overlay_pos.y + 200).as_tuple())
 
+        scr.blit(self.surf_keys, m.Vector(overlay_pos.x + 10, overlay_pos.y + c.GAMEOVER_DIMENSIONS.y - 40).as_tuple())
