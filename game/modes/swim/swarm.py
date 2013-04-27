@@ -28,7 +28,8 @@ class Swarm(game.PhysicsEntity):
 
     def render(self):
         scr = self.mode.game.screen
-        u.draw_pos_dir(scr, self)
+        cam = self.mode.camera.position
+        u.draw_pos_dir(scr, self.position - cam, self.direction)
 
         for f in self.fishes:
             f.render()

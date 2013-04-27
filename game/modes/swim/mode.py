@@ -6,6 +6,7 @@ import game
 import game.constants as c
 import game.util as u
 import swarm
+import camera
 
 class SwimMode(game.Mode):
 
@@ -13,11 +14,17 @@ class SwimMode(game.Mode):
         game.Mode.__init__(self, g)
 
         self.swarm = swarm.Swarm(self, c.SCREEN_DIMENSIONS / 2)
+        self.camera = camera.Camera(self)
+        self.mouse_pos_world = self.swarm.position
 
     def update(self, time_elapsed):
-        self.swarm.target_position = self.game.mouse_pos
+        self.camera.update(time_elapsed)
+        self.mouse_pos_world = self.game.mouse_pos + self.camera.position
+        self.swarm.target_position = self.mouse_pos_world
+
 
         self.swarm.update(time_elapsed)
+
 
     def render(self):
 
@@ -25,4 +32,5 @@ class SwimMode(game.Mode):
 
         scr.fill(c.BACKGROUND_COLOR)
 
+        self.camera.render()
         self.swarm.render()

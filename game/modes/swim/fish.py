@@ -67,6 +67,8 @@ class Fish(game.PhysicsEntity):
 
     def render(self):
         scr = self.mode.game.screen
-        u.draw_pos_dir(scr, self, color=(0, 255, 0), radius=2)
+        cam = self.mode.camera.position
+
+        u.draw_pos_dir(scr, self.position - cam, self.direction, color=(0, 255, 0), radius=2)
 
         #u.draw_text(scr, self.position, "ta={:.2f} a={:.2f}, r={:.2f}, av={:.2f}".format(self.target_angle, self.angle, self.target_rotation, self.angular_velocity))
