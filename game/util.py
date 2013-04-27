@@ -7,6 +7,9 @@ import math
 
 V_11 = m.Vector(1, 1)
 
+pygame.font.init()
+DEBUG_FONT = pygame.font.Font( pygame.font.get_default_font(), 12)
+
 def random_dir(min_radius = 0.1, max_radius = 1, min_angle = 0, max_angle = 2 * math.pi):
 
     radius = random.uniform(min_radius, max_radius)
@@ -14,6 +17,14 @@ def random_dir(min_radius = 0.1, max_radius = 1, min_angle = 0, max_angle = 2 * 
 
     return m.Vector(math.cos(angle) * radius, math.sin(angle) * radius)
 
+def angle_steer(current, target):
+    left = (target - current + math.pi * 2) % (math.pi * 2)
+    right = (current - target + math.pi * 2) % (math.pi * 2)
+
+    if left < right:
+        return left
+    else:
+        return -right
 
 def draw_cross(surface, pos, color=(255, 0, 0), radius=3):
     pygame.draw.line(
@@ -50,3 +61,8 @@ def draw_pos_dir(surface, pos, direction=None, color=(255, 0, 0), radius=3):
         pos.as_tuple(),
         (pos + direction).as_tuple()
     )
+
+
+def draw_text(surface, pos, text, color=(255,0,0)):
+    txt = DEBUG_FONT.render(text, True, color)
+    surface.blit(txt, pos.as_tuple())

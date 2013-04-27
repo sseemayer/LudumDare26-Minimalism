@@ -19,7 +19,7 @@ class Entity(object):
         pass
 
 class PhysicsEntity(Entity):
-    def __init__(self, mode, position=m.Vector(0, 0), direction=m.Vector(0, 0), angle=0, mass=1, velocity=m.Vector(0,0), angular_velocity=0, max_velocity=1, max_angular_velocity=1, velocity_decay=1):
+    def __init__(self, mode, position=m.Vector(0, 0), direction=m.Vector(0, 0), angle=0, mass=1, velocity=m.Vector(0,0), angular_velocity=0, max_velocity=1, max_angular_velocity=1, velocity_decay=1, angular_velocity_decay=1):
         Entity.__init__(self, mode, position, direction)
         self.mass = mass
         self.velocity = velocity
@@ -32,6 +32,7 @@ class PhysicsEntity(Entity):
         self.torque = 0
         self.angular_velocity = angular_velocity
         self.max_angular_velocity = max_angular_velocity
+        self.angular_velocity_decay = angular_velocity_decay
 
     def __str__(self):
         return "PhysicsEntity(pos={}, dir={}, m={}, f={}, vel={})".format(self.position, self.direction, self.mass, self.force, self.velocity)
@@ -47,7 +48,7 @@ class PhysicsEntity(Entity):
         self.acceleration.y = 0
 
         self.velocity *= self.velocity_decay
-        self.angular_velocity *= self.velocity_decay
+        self.angular_velocity *= self.angular_velocity_decay
 
         self.apply_force()
 
@@ -56,7 +57,7 @@ class PhysicsEntity(Entity):
         self.angular_velocity += self.torque * time_elapsed
 
         if self.angular_velocity > self.max_angular_velocity:
-            self.angular_velocity = self.max_velocity
+            self.angular_velocity = self.max_angular_velocity
 
         if self.angular_velocity < -self.max_angular_velocity:
             self.angular_velocity = -self.max_angular_velocity
@@ -65,5 +66,6 @@ class PhysicsEntity(Entity):
             self.velocity = self.velocity.normalize() * self.max_velocity
 
         self.position += self.velocity * time_elapsed
-        self.angle += (self.angular_velocity * time_elapsed) % 2 * math.pi
+        self.angle += self.angular_velocity * time_elapsed
+        self.angle %= 2 * math.pi
 

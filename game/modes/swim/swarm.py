@@ -8,13 +8,13 @@ import fish
 
 class Swarm(game.PhysicsEntity):
 
-    def __init__(self, mode, position=m.Vector(0, 0), direction=m.Vector(0, 0), initial_fishes=10, fish_radius=100):
+    def __init__(self, mode, position=m.Vector(0, 0), direction=m.Vector(0, 0), initial_fishes=c.START_FISHES, fish_radius=100):
         super(Swarm, self).__init__(mode, position, direction, max_velocity=c.SWARM_MAX_VELOCITY, velocity_decay=c.SWARM_VELOCITY_DECAY)
 
         self.target_position = position
 
 
-        self.fishes = [fish.Fish(self, u.random_dir() * fish_radius, u.random_dir()) for _ in range(initial_fishes)]
+        self.fishes = [fish.Fish(self, position +  u.random_dir() * fish_radius, u.random_dir()) for _ in range(initial_fishes)]
 
     def apply_force(self):
         self.acceleration += (self.target_position - self.position).clamp() * c.SWARM_ACCELERATION
@@ -24,7 +24,6 @@ class Swarm(game.PhysicsEntity):
         self.direction = self.velocity * 100
 
         for f in self.fishes:
-            f.target_position = self.position
             f.update(time_elapsed)
 
     def render(self):
