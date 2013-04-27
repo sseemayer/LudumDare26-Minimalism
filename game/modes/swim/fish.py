@@ -5,6 +5,7 @@ import game.constants as c
 import py2d.Math as m
 
 import math
+import food
 
 class Fish(game.PhysicsEntity):
 
@@ -82,6 +83,10 @@ class Fish(game.PhysicsEntity):
         game.PhysicsEntity.update(self, time_elapsed)
         self.direction = m.Vector(math.cos(self.angle), math.sin(self.angle)) * 10
         self.food -= c.FISH_STARVATION * time_elapsed
+
+        if self.food <= 0:
+            self.swarm.fishes.remove(self)
+            self.mode.foods.append(food.Food(self.mode, self.position))
 
         if self.food >= 2 * c.FISH_BABY_FOOD:
             self.food -= c.FISH_BABY_FOOD
