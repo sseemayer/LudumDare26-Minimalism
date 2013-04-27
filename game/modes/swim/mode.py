@@ -7,6 +7,7 @@ import game.constants as c
 import game.util as u
 import swarm
 import camera
+import food
 
 class SwimMode(game.Mode):
 
@@ -16,6 +17,8 @@ class SwimMode(game.Mode):
         self.swarm = swarm.Swarm(self, c.SCREEN_DIMENSIONS / 2)
         self.camera = camera.Camera(self)
         self.mouse_pos_world = self.swarm.position
+
+        self.foods = [food.Food(self, m.VECTOR_X * x * 100) for x in range(5, 10)]
 
     def update(self, time_elapsed):
         self.camera.update(time_elapsed)
@@ -34,3 +37,6 @@ class SwimMode(game.Mode):
 
         self.camera.render()
         self.swarm.render()
+
+        for f in self.foods:
+            f.render()

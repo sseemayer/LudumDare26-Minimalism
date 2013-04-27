@@ -12,6 +12,7 @@ class Fish(game.PhysicsEntity):
         super(Fish, self).__init__(swarm.mode, position, direction, max_velocity=c.FISH_MAX_VELOCITY, max_angular_velocity=c.FISH_MAX_ANGULAR_VELOCITY, velocity_decay=c.FISH_VELOCITY_DECAY, angular_velocity_decay=c.FISH_ANGULAR_VELOCITY_DECAY)
 
         self.swarm = swarm
+        self.food = 0
 
     def apply_force(self):
 
@@ -35,6 +36,22 @@ class Fish(game.PhysicsEntity):
         neighbors_direction = sum(  (n.angle + 2*math.pi) % (2*math.pi) for n in neighbors ) / len(neighbors)
 
         neighbors_direction = neighbors_direction % (2*math.pi)
+
+        fd_squared = c.FISH_FOOD_DISTANCE ** 2
+
+        foods = [ f for f in self.mode.foods if (f.position - self.position).length_squared < fd_squared]
+        if foods:
+            closest_food = sorted(foods, key=lambda f: (f.position - self.position).length_squared)[0]
+
+            go_to_swarm = closest_food.position - self.position
+            if go_to_swarm.length < c.FISH_EAT_DISTANCE:
+                go_to_swarm = m.VECTOR_NULL
+                closest_food.nutrition_value -= 1
+                self.food += 1
+
+                if closest_food.nutrition_value <= 0:
+                    self.mode.foods.remove(closest_food)
+
 
         repel_sum = m.Vector(0, 0)
         rd_squared = c.SWARM_NEIGHBOR_REPEL_DISTANCE ** 2
@@ -65,10 +82,14 @@ class Fish(game.PhysicsEntity):
         game.PhysicsEntity.update(self, time_elapsed)
         self.direction = m.Vector(math.cos(self.angle), math.sin(self.angle)) * 10
 
+        if self.food >= c.FISH_BABY_FOOD:
+            self.food -= c.FISH_BABY_FOOD
+            self.swarm.fishes.append(Fish(self.swarm, self.position))
+
     def render(self):
         scr = self.mode.game.screen
         cam = self.mode.camera.position
 
-        u.draw_pos_dir(scr, self.position - cam, self.direction, color=(0, 255, 0), radius=2)
+        u.draw_pos_dir(scr, self.position - cam, self.direction, color=(0, 255, 0), radius=math.sqrt(self.food)+2)
 
         #u.draw_text(scr, self.position, "ta={:.2f} a={:.2f}, r={:.2f}, av={:.2f}".format(self.target_angle, self.angle, self.target_rotation, self.angular_velocity))
