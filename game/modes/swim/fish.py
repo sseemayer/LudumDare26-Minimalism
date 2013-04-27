@@ -7,7 +7,7 @@ import py2d.Math as m
 class Fish(game.PhysicsEntity):
 
     def __init__(self, swarm, position=m.Vector(0, 0), direction=m.Vector(0, 0)):
-        super(Swarm, self).__init__(swarm.mode, position, direction, max_velocity=c.SWARM_MAX_VELOCITY, velocity_decay=c.SWARM_VELOCITY_DECAY)
+        super(Fish, self).__init__(swarm.mode, position, direction, max_velocity=c.SWARM_MAX_VELOCITY, velocity_decay=c.SWARM_VELOCITY_DECAY)
 
         self.swarm = swarm
         self.target_position = position
@@ -17,6 +17,7 @@ class Fish(game.PhysicsEntity):
 
     def update(self, time_elapsed):
         game.PhysicsEntity.update(self, time_elapsed)
+        self.direction = self.velocity * 100
 
     def render(self):
         scr = self.mode.game.screen

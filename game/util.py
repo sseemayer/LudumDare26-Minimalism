@@ -2,8 +2,18 @@ import pygame
 import py2d.Math as m
 
 import game.entity
+import random
+import math
 
 V_11 = m.Vector(1, 1)
+
+def random_dir(min_radius = 0.1, max_radius = 1, min_angle = 0, max_angle = 2 * math.pi):
+
+    radius = random.uniform(min_radius, max_radius)
+    angle = random.uniform(min_angle, max_angle)
+
+    return m.Vector(math.cos(angle) * radius, math.sin(angle) * radius)
+
 
 def draw_cross(surface, pos, color=(255, 0, 0), radius=3):
     pygame.draw.line(
@@ -27,8 +37,6 @@ def draw_pos_dir(surface, pos, direction=None, color=(255, 0, 0), radius=3):
         # pos is an Entity, take position and direction from that
         direction = pos.direction
         pos = pos.position
-
-    print pos, direction, radius
 
     pygame.draw.ellipse(
         surface,
