@@ -5,17 +5,19 @@ import py2d.Math as m
 import game
 import game.constants as c
 import game.util as u
-import game.modes.swim.swarm as swarm
+import swarm
 
 class SwimMode(game.Mode):
 
     def __init__(self, g):
         game.Mode.__init__(self, g)
 
-        self.swarm_origin = swarm.Swarm()
+        self.swarm = swarm.Swarm(self, c.SCREEN_DIMENSIONS / 2)
 
     def update(self, time_elapsed):
-        self.swarm_origin.position = self.game.mouse_pos
+        self.swarm.target_position = self.game.mouse_pos
+
+        self.swarm.update(time_elapsed)
 
     def render(self):
 
@@ -23,4 +25,4 @@ class SwimMode(game.Mode):
 
         scr.fill(c.BACKGROUND_COLOR)
 
-        game.util.draw_pos_dir(scr, self.swarm_origin)
+        self.swarm.render()

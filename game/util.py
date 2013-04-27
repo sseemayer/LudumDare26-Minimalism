@@ -3,6 +3,8 @@ import py2d.Math as m
 
 import game.entity
 
+V_11 = m.Vector(1, 1)
+
 def draw_cross(surface, pos, color=(255, 0, 0), radius=3):
     pygame.draw.line(
         surface,
@@ -26,11 +28,12 @@ def draw_pos_dir(surface, pos, direction=None, color=(255, 0, 0), radius=3):
         direction = pos.direction
         pos = pos.position
 
-    pygame.draw.circle(
+    print pos, direction, radius
+
+    pygame.draw.ellipse(
         surface,
         color,
-        pos.as_tuple(),
-        radius
+        ( (pos - V_11 * radius).as_tuple(), (radius * 2, radius * 2) )
     )
 
     pygame.draw.line(
