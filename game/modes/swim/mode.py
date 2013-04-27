@@ -2,18 +2,17 @@ import pygame
 
 import py2d.Math as m
 
+import game
 import game.constants as c
+import game.util as u
+import game.modes.swim.swarm as swarm
 
-import game.mode
-import game.entity
-import game.util
-
-class SwimMode(game.mode.Mode):
+class SwimMode(game.Mode):
 
     def __init__(self, g):
-        game.mode.Mode.__init__(self, g)
+        game.Mode.__init__(self, g)
 
-        self.swarm_origin = game.entity.Entity()
+        self.swarm_origin = swarm.Swarm()
 
     def update(self, time_elapsed):
         self.swarm_origin.position = self.game.mouse_pos
