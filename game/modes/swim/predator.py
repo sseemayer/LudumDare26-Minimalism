@@ -22,13 +22,14 @@ class Predator(game.PhysicsEntity):
         # 1. position
         # a) go to closest fish
         # b) avoid other predators
+        # c) random walk
         #
         # 2. angle
         # a) rotate so that we move into direction
 
         preys = [ f for f in self.mode.swarm.fishes if (f.position - self.position).length < c.PREDATOR_SENSES]
 
-        go_to_prey = m.Vector(0, 0)
+        go_to_prey = u.random_dir() * 10000
         if not self.target and preys:
             self.target = sorted(preys, key=lambda p: (p.position - self.position).length_squared)[0]
 
@@ -40,7 +41,6 @@ class Predator(game.PhysicsEntity):
         for n in neighbors:
             repel = self.position - n.position
             repel_sum += repel * (c.PREDATOR_REPEL_STRENGTH / (1 + repel.length))
-
 
         self.target_direction = go_to_prey * c.PREDATOR_W_GO_TO_PREY + repel_sum * c.PREDATOR_W_REPEL
         self.target_direction = self.target_direction.clamp()
