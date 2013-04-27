@@ -25,8 +25,8 @@ class Camera(game.PhysicsEntity):
 
     def render(self):
         u.draw_text(self.mode.game.screen, m.Vector(80, 0), "Camera: {}".format(self.position))
-        u.draw_text(self.mode.game.screen, m.Vector(80, 20), "MouseW: {}".format(self.mode.mouse_pos_world))
-        u.draw_text(self.mode.game.screen, m.Vector(80, 40), "MouseS: {}".format(self.mode.game.mouse_pos))
+        u.draw_text(self.mode.game.screen, m.Vector(80, 20), "Active: {}".format(self.mode.active_sectors))
+        u.draw_text(self.mode.game.screen, m.Vector(80, 40), "Sector: {} {}".format(self.mode.sector_x, self.mode.sector_y))
 
         u.draw_cross(self.mode.game.screen, self.mode.mouse_pos_world - self.position)
 

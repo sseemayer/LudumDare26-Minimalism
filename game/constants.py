@@ -1,10 +1,13 @@
 import py2d.Math as m
+import random
 
 GAME_TITLE = 'Ludum Dare 26 - Minimalism'
 SCREEN_DIMENSIONS = m.Vector(640, 480)
 
-START_SECTOR = (334, 153)
-SECTOR_SIZE = m.Vector(640, 480)
+START_SECTOR = (168, 76)
+START_SAFEZONE = 300
+SECTOR_SIZE = m.Vector(600, 600)
+SIMULATION_RADIUS = 1
 
 TARGET_FPS = 40
 
@@ -67,3 +70,5 @@ PREDATOR_ANGULAR_VELOCITY_DECAY = 0.9
 PREDATOR_VELOCITY_DECAY = 0.8
 
 
+SECTOR_PREDATORS = lambda depth: int(random.gammavariate(depth * 10, 1))
+SECTOR_FOOD = lambda depth: int(random.gammavariate((1-depth) * 100, 0.1))
