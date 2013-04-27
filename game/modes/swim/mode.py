@@ -13,6 +13,7 @@ import swarm
 import camera
 import food
 import predator
+import shore
 import game.world
 
 class SwimMode(game.Mode):
@@ -26,6 +27,7 @@ class SwimMode(game.Mode):
 
         self.foods = []
         self.predators = []
+        self.shore = []
 
         self.active_sectors = set()
         self.change_sector(c.START_SECTOR[0], c.START_SECTOR[1])
@@ -38,18 +40,20 @@ class SwimMode(game.Mode):
         tl = m.Vector(c.SECTOR_SIZE.x * (x - c.START_SECTOR[0]), c.SECTOR_SIZE.y * (y-c.START_SECTOR[1]))
         depth = game.world.depth((x, y))
 
-        if not depth: return
+        if depth:
+            n_predators = c.SECTOR_PREDATORS(depth)
+            n_food = c.SECTOR_FOOD(depth)
 
-        n_predators = c.SECTOR_PREDATORS(depth)
-        n_food = c.SECTOR_FOOD(depth)
+            def uniform_point(x_min = tl.x, x_max=tl.x + c.SECTOR_SIZE.x, y_min=tl.y, y_max=tl.y + c.SECTOR_SIZE.y):
+                return m.Vector(random.uniform(x_min, x_max), random.uniform(y_min, y_max))
 
-        def uniform_point(x_min = tl.x, x_max=tl.x + c.SECTOR_SIZE.x, y_min=tl.y, y_max=tl.y + c.SECTOR_SIZE.y):
-            return m.Vector(random.uniform(x_min, x_max), random.uniform(y_min, y_max))
+            self.predators.extend(predator.Predator(self, uniform_point()) for _ in range(n_predators))
+            self.foods.extend(food.Food(self, uniform_point()) for _ in range(n_food))
 
-        self.predators.extend(predator.Predator(self, uniform_point()) for _ in range(n_predators))
-        self.foods.extend(food.Food(self, uniform_point()) for _ in range(n_food))
+            #print("Sector {}, {} (depth {}): Added {} predators and {} food items".format(x, y, depth, n_predators, n_food))
 
-        #print("Sector {}, {} (depth {}): Added {} predators and {} food items".format(x, y, depth, n_predators, n_food))
+        else:
+            self.shore.append(shore.Shore(self, tl, game.world.WORLD.get_at((x,y))))
 
     def change_sector(self, x, y):
 
@@ -58,9 +62,6 @@ class SwimMode(game.Mode):
             range(y - c.SIMULATION_RADIUS, y + c.SIMULATION_RADIUS + 1)
         ))
 
-
-        #print(newactive_sectors)
-#
         add_sectors = newactive_sectors.difference(self.active_sectors)
         for i, j in add_sectors:
                 self.fill_sector(i, j)
@@ -75,7 +76,6 @@ class SwimMode(game.Mode):
 
 
         #print("foods: {} (before: {}), predators: {} (before: {})".format(len(self.foods), nf, len(self.predators), np))
-
 
         self.active_sectors = newactive_sectors
 
@@ -112,20 +112,14 @@ class SwimMode(game.Mode):
     def render(self):
 
         scr = self.game.screen
-        cam = self.camera.position
 
         scr.fill(self.color)
 
-        tl = m.Vector(c.SECTOR_SIZE.x * (self.sector_x - c.START_SECTOR[0]), c.SECTOR_SIZE.y * (self.sector_y-c.START_SECTOR[1])) - cam
-
-        u.draw_line(scr, tl, m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y))
-        u.draw_line(scr, m.Vector(tl.x, tl.y + c.SECTOR_SIZE.y), m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y + c.SECTOR_SIZE.y))
-        u.draw_line(scr, tl, m.Vector(tl.x, tl.y + c.SECTOR_SIZE.y))
-        u.draw_line(scr, m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y), m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y + c.SECTOR_SIZE.y))
-
-
         self.camera.render()
         self.swarm.render()
+
+        for s in self.shore:
+            s.render()
 
         for f in self.foods:
             f.render()
@@ -133,5 +127,17 @@ class SwimMode(game.Mode):
         for p in self.predators:
             p.render()
 
+        self.render_gui()
+
+    def render_gui(self):
+        scr = self.game.screen
+        cam = self.camera.position
+
+        tl = m.Vector(c.SECTOR_SIZE.x * (self.sector_x - c.START_SECTOR[0]), c.SECTOR_SIZE.y * (self.sector_y-c.START_SECTOR[1])) - cam
 
         game.world.render(scr, (0, 0), (self.sector_x, self.sector_y))
+
+        u.draw_line(scr, tl, m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y))
+        u.draw_line(scr, m.Vector(tl.x, tl.y + c.SECTOR_SIZE.y), m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y + c.SECTOR_SIZE.y))
+        u.draw_line(scr, tl, m.Vector(tl.x, tl.y + c.SECTOR_SIZE.y))
+        u.draw_line(scr, m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y), m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y + c.SECTOR_SIZE.y))

@@ -1,10 +1,10 @@
 import py2d.Math as m
 import random
 
-GAME_TITLE = 'Ludum Dare 26 - Minimalism'
+GAME_TITLE = 'Migration - Ludum Dare 26 entry by semi'
 SCREEN_DIMENSIONS = m.Vector(640, 480)
 
-START_SECTOR = (168, 76)
+START_SECTOR = (123, 88)
 START_SAFEZONE = 300
 SECTOR_SIZE = m.Vector(600, 600)
 SIMULATION_RADIUS = 1
