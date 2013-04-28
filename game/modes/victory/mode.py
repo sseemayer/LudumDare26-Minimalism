@@ -19,25 +19,25 @@ import glyph
 
 import game.modes.worldmap.mode
 
-class DeathMode(game.Mode):
+class VictoryMode(game.Mode):
 
     def __init__(self, g, swim_mode):
         game.Mode.__init__(self, g)
 
         self.swim_mode = swim_mode
-        self.message = "All your fishies have died :("
+        self.message = "You have made it!"
 
         self.overlay_surf = pygame.Surface(c.GAMEOVER_DIMENSIONS.as_tuple(), flags=SRCALPHA)
         self.overlay_surf.fill((0,0,0,200))
 
-        self.fishbones = pygame.image.load("data/images/fishbones.png").convert_alpha()
+        self.fishbones = pygame.image.load("data/images/fish_whole.png").convert_alpha()
         self.fishbones = pygame.transform.scale(self.fishbones, (self.fishbones.get_width() * 4, self.fishbones.get_height() * 4) )
         self.fishbones_size = m.Vector(self.fishbones.get_width(), self.fishbones.get_height())
 
         self.header_font = pgf.PyGameHieroFont("data/fonts/AmaticSC_52.fnt")
         self.main_font = pgf.PyGameHieroFont("data/fonts/Antic_22.fnt")
 
-        self.surf_game_over = self.header_font.render("Game Over")
+        self.surf_game_over = self.header_font.render("Success!")
         self.surf_message = self.main_font.render(self.message)
 
         self.cursor = pygame.image.load("data/images/cursor.png").convert_alpha()
@@ -109,7 +109,7 @@ class DeathMode(game.Mode):
         self.g_stats = glyph.Glyph(g_rect, bkg=pygame.Color(0,0,0,0), font=self.main_font)
         self.g_stats.image = pygame.Surface(g_rect.size, flags=SRCALPHA)
         self.g_stats.image.fill(pygame.Color(0,0,0,0))
-        self.g_stats.input("Before dying, you have travelled {distance:.2f} m, eaten {food:.2f} kg of food and had {fishies} fishies, {fishies_max} at one time.".format(**stats))
+        self.g_stats.input("Before your victorious arrival, you have travelled {distance:.2f} m, eaten {food:.2f} kg of food and had {fishies} fishies, {fishies_max} at one time.".format(**stats))
         self.g_stats.update()
 
 

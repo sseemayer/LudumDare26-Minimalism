@@ -9,6 +9,7 @@ import game.constants as c
 import game.audio
 
 import game.modes.menu.mode
+import game.modes.victory.mode
 
 import py2d.Math as m
 
@@ -32,6 +33,10 @@ class Game(object):
 
     def die(self, swim_mode):
         self.mode = game.modes.death.mode.DeathMode(self, swim_mode)
+
+
+    def win(self, swim_mode):
+        self.mode = game.modes.victory.mode.VictoryMode(self, swim_mode)
 
     def loop(self):
 

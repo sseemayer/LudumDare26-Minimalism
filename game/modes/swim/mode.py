@@ -81,6 +81,9 @@ class SwimMode(game.Mode):
 
     def change_sector(self, x, y):
 
+        if (x - c.GOAL_SECTOR[0]) ** 2 + (y - c.GOAL_SECTOR[1]) ** 2 < c.GOAL_RADIUS ** 2:
+            self.game.win(self)
+
         newactive_sectors = set(itertools.product(
             range(x - c.SIMULATION_RADIUS, x + c.SIMULATION_RADIUS + 1),
             range(y - c.SIMULATION_RADIUS, y + c.SIMULATION_RADIUS + 1)
@@ -109,9 +112,6 @@ class SwimMode(game.Mode):
 
         self.color = game.world.data['WORLD'].get_at((x, y))
         self.depth = game.world.depth((x,y))
-
-        print(self.depth)
-
 
         self.sector_history.append((x, y))
 

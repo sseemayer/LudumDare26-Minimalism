@@ -18,7 +18,7 @@ import glyph
 
 class WorldmapMode(game.Mode):
 
-    def __init__(self, g, swim_mode):
+    def __init__(self, g, swim_mode, prev_mode):
         game.Mode.__init__(self, g)
 
         self.swim_mode = swim_mode
@@ -56,7 +56,7 @@ class WorldmapMode(game.Mode):
             self.game.mode = game.modes.swim.mode.SwimMode(self.game)
 
         def stats():
-            self.game.mode = game.modes.death.mode.DeathMode(self.game, self.swim_mode)
+            self.game.mode = prev_mode
 
         self.buttons = [
             {"title": "Main Menu", "action": menu},
