@@ -28,8 +28,8 @@ class Game(object):
 
         self.keys = collections.defaultdict(bool)
 
-    def die(self, swim_mode, message="All your fishies are dead :("):
-        self.mode = game.modes.death.mode.DeathMode(self, swim_mode, message)
+    def die(self, swim_mode):
+        self.mode = game.modes.death.mode.DeathMode(self, swim_mode)
 
     def loop(self):
 
