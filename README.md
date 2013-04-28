@@ -1,6 +1,8 @@
 # The Migration
 
-My entry for the [Ludum Dare 2](http://www.ludumdare.com/compo/) competition is about leading a swarm of fish that migrates from the Falkland Islands in Southern America to the mediterranean sea. You indirectly control the swarm using the mouse. Fish eat plankton, if they eat enough of it, they will reproduce and your swarm will grow. Try to steer your swarm away from predator fish. 
+![Title](http://imgur.com/UREEGKp)  ![Gameplay](http://imgur.com/unl4vMp)
+
+My entry for the [Ludum Dare 26 competition](http://www.ludumdare.com/compo/) is about leading a swarm of fish that migrates from the Falkland Islands in Southern America to the mediterranean sea. You indirectly control the swarm using the mouse. Fish eat plankton, if they eat enough of it, they will reproduce and your swarm will grow. Try to steer your swarm away from predator fish. 
 
 As soon as you get out into the open water, the game will become more difficult. Be sure to take good care of your fish and you will be able to make it to the end!
 
