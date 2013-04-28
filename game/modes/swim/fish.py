@@ -12,9 +12,6 @@ import food
 
 fish_frames = [pygame.image.load("data/images/fish_{}.png".format(i)) for i in range(4)]
 
-fish_rot = [ [ pygame.transform.rotozoom(frame, angle * math.pi / 180, 1) for frame in fish_frames] for angle in range(360) ]
-
-
 class Fish(game.PhysicsEntity):
 
     def __init__(self, swarm, position=m.Vector(0, 0), direction=m.Vector(0, 0)):
@@ -120,9 +117,6 @@ class Fish(game.PhysicsEntity):
         cam = self.mode.camera.position
 
         frame = int(self.anim_timer / c.FISH_ANIM_DELAY)
-        rot = int(360 + self.angle / math.pi * 180) % 360
-
-        sprite = fish_rot[rot][frame]
 
         sprite_stretch = pygame.transform.rotozoom(fish_frames[frame], -self.angle / math.pi * 180, 0.1 + math.sqrt(self.food / c.FISH_BABY_FOOD))
         sprite_dim = m.Vector(sprite_stretch.get_width(), sprite_stretch.get_height())
