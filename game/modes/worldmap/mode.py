@@ -41,6 +41,9 @@ class WorldmapMode(game.Mode):
         self.surf_game_over = self.header_font.render("Travel Log")
         self.surf_keys = self.main_font.render("(R): Retry", color=(255,0,0))
 
+        self.cursor = pygame.image.load("data/images/cursor.png")
+        self.cursor_size = m.Vector(self.cursor.get_width(), self.cursor.get_height())
+
         overlay_pos = c.SCREEN_DIMENSIONS / 2 - c.GAMEOVER_DIMENSIONS / 2
 
     def update(self, time_elapsed):
@@ -64,3 +67,4 @@ class WorldmapMode(game.Mode):
 
         scr.blit(self.surf_keys, m.Vector(overlay_pos.x + 10, overlay_pos.y + c.GAMEOVER_DIMENSIONS.y - 40).as_tuple())
 
+        scr.blit(self.cursor, (self.game.mouse_pos - self.cursor_size / 2).as_tuple())

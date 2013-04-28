@@ -42,6 +42,9 @@ class DeathMode(game.Mode):
 
         self.surf_keys = self.main_font.render("(L): Travel Log, (R): Retry", color=(255,0,0))
 
+        self.cursor = pygame.image.load("data/images/cursor.png")
+        self.cursor_size = m.Vector(self.cursor.get_width(), self.cursor.get_height())
+
         overlay_pos = c.SCREEN_DIMENSIONS / 2 - c.GAMEOVER_DIMENSIONS / 2
 
         g_rect = pygame.Rect((overlay_pos[0], overlay_pos[1] + 200), (c.GAMEOVER_DIMENSIONS.x, c.GAMEOVER_DIMENSIONS.y - 250 ))
@@ -84,3 +87,6 @@ class DeathMode(game.Mode):
         scr.blit(self.g_stats.image, m.Vector(c.SCREEN_DIMENSIONS.x / 2 - self.g_stats.image.get_width() / 2, overlay_pos.y + 200).as_tuple())
 
         scr.blit(self.surf_keys, m.Vector(overlay_pos.x + 10, overlay_pos.y + c.GAMEOVER_DIMENSIONS.y - 40).as_tuple())
+
+
+        scr.blit(self.cursor, (self.game.mouse_pos - self.cursor_size / 2).as_tuple())
