@@ -111,7 +111,7 @@ class Fish(game.PhysicsEntity):
             if repel.length_squared <= rd_squared:
                 repel_sum += repel * ( c.FISH_REPEL_STRENGTH / (1 + repel.length))
 
-        self.target_direction = flee_from_predator_sum +  go_to_swarm * c.FISH_W_GO_TO_SWARM + repel_sum * c.FISH_W_REPEL
+        self.target_direction = flee_from_predator_sum * c.FISH_W_FLEE +  go_to_swarm * c.FISH_W_GO_TO_SWARM + repel_sum * c.FISH_W_REPEL
         self.target_direction = self.target_direction.clamp()
 
         move_angle = math.atan2(self.target_direction.y, self.target_direction.x)
