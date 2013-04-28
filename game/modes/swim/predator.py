@@ -42,7 +42,12 @@ class Predator(game.PhysicsEntity):
 
         go_to_prey = self.random_walk_direction
         if preys:
-            self.target = sorted(preys, key=lambda p: (p.position - self.position).length_squared)[0]
+            new_target = sorted(preys, key=lambda p: (p.position - self.position).length_squared)[0]
+            if self.target != new_target:
+                self.mode.game.audio.play("attack")
+
+            self.target = new_target
+
             go_to_prey = self.target.position - self.position
 
         neighbors = [ p for p in self.mode.predators if (p.position - self.position).length < c.PREDATOR_REPEL_DISTANCE ]
@@ -92,6 +97,7 @@ class Predator(game.PhysicsEntity):
 
             if target_distance < c.PREDATOR_EAT_DISTANCE:
                 self.target.modify_food( -c.PREDATOR_EAT_DAMAGE)
+                self.mode.game.audio.play("hurt")
 
 
 

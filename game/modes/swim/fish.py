@@ -37,6 +37,8 @@ class Fish(game.PhysicsEntity):
         if self.food >= c.FISH_BABY_THRESHOLD:
             self.modify_food(-c.FISH_BABY_COST)
 
+            self.mode.game.audio.play("grow")
+
             self.mode.fishies_spawned += 1
             self.mode.fishies_max = max(self.mode.fishies_max, len(self.swarm.fishes))
             self.swarm.fishes.append(Fish(self.swarm, self.position, color=self.color))
@@ -79,6 +81,8 @@ class Fish(game.PhysicsEntity):
                 closest_food.nutrition_value -= 1
                 self.modify_food(1)
                 self.mode.food_eaten += 1
+
+                self.mode.game.audio.play("eat")
 
                 color_ratio = 1 / self.food
 

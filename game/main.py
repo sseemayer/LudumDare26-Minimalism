@@ -6,6 +6,7 @@ import collections
 
 import game
 import game.constants as c
+import game.audio
 
 import game.modes.menu.mode
 
@@ -27,6 +28,7 @@ class Game(object):
         self.mouse_pos = m.Vector(0, 0)
 
         self.keys = collections.defaultdict(bool)
+        self.audio = game.audio.AudioManager()
 
     def die(self, swim_mode):
         self.mode = game.modes.death.mode.DeathMode(self, swim_mode)
