@@ -1,3 +1,4 @@
+import pygame
 import game
 import game.util as u
 import game.constants as c
@@ -5,7 +6,14 @@ import game.constants as c
 import py2d.Math as m
 
 import math
+import random
+
 import food
+
+fish_frames = [pygame.image.load("data/images/fish_{}.png".format(i)) for i in range(4)]
+
+fish_rot = [ [ pygame.transform.rotozoom(frame, angle * math.pi / 180, 1) for frame in fish_frames] for angle in range(360) ]
+
 
 class Fish(game.PhysicsEntity):
 
@@ -14,6 +22,8 @@ class Fish(game.PhysicsEntity):
 
         self.swarm = swarm
         self.food = c.FISH_BABY_FOOD
+
+        self.anim_timer = random.uniform(0, len(fish_frames)) * c.FISH_ANIM_DELAY
 
     def modify_food(self, delta):
         self.food += delta
@@ -61,7 +71,7 @@ class Fish(game.PhysicsEntity):
             closest_food = sorted(foods, key=lambda f: (f.position - self.position).length_squared)[0]
 
             go_to_swarm = closest_food.position - self.position
-            if go_to_swarm.length < c.FISH_EAT_DISTANCE * 0.8:
+            if go_to_swarm.length < c.FISH_EAT_DISTANCE * 0.2:
                 go_to_swarm = m.VECTOR_NULL
                 closest_food.nutrition_value -= 1
                 self.modify_food(1)
@@ -101,11 +111,24 @@ class Fish(game.PhysicsEntity):
         self.direction = m.Vector(math.cos(self.angle), math.sin(self.angle)) * 10
         self.modify_food(-c.FISH_STARVATION * time_elapsed)
 
+        self.anim_timer += time_elapsed * self.acceleration.length
+        self.anim_timer %= c.FISH_ANIM_DELAY * len(fish_frames)
+
 
     def render(self):
         scr = self.mode.game.screen
         cam = self.mode.camera.position
 
-        u.draw_pos_dir(scr, self.position - cam, self.direction, color=(0, 255, 0), radius=math.sqrt(self.food)+2)
+        frame = int(self.anim_timer / c.FISH_ANIM_DELAY)
+        rot = int(360 + self.angle / math.pi * 180) % 360
+
+        sprite = fish_rot[rot][frame]
+
+        sprite_stretch = pygame.transform.rotozoom(fish_frames[frame], -self.angle / math.pi * 180, 0.1 + math.sqrt(self.food / c.FISH_BABY_FOOD))
+        sprite_dim = m.Vector(sprite_stretch.get_width(), sprite_stretch.get_height())
+
+        scr.blit(sprite_stretch, (self.position - cam - sprite_dim / 2).as_tuple())
+
+        #u.draw_pos_dir(scr, self.position - cam, self.direction, color=(0, 255, 0), radius=math.sqrt(self.food)+2)
 
         #u.draw_text(scr, self.position, "ta={:.2f} a={:.2f}, r={:.2f}, av={:.2f}".format(self.target_angle, self.angle, self.target_rotation, self.angular_velocity))
