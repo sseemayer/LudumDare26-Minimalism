@@ -67,7 +67,8 @@ class Predator(game.PhysicsEntity):
         self.angular_velocity -= self.target_rotation * c.PREDATOR_ANGULAR_ACCELERATION
         acc = m.Vector(math.cos(self.angle), math.sin(self.angle))
 
-        self.acceleration += acc *  (acc * self.target_direction.clamp()) * c.PREDATOR_ACCELERATION
+        acceleration = c.PREDATOR_HUNT_ACCELERATION if self.target else c.PREDATOR_ACCELERATION
+        self.acceleration += acc *  (acc * self.target_direction.clamp()) * acceleration
 
     def new_random_walk_dir(self):
         self.random_walk_direction = u.random_dir() * c.PREDATOR_RANDOM_WALK_RADIUS
@@ -81,6 +82,10 @@ class Predator(game.PhysicsEntity):
 
         self.anim_timer += time_elapsed * self.acceleration.length
         self.anim_timer %= c.PREDATOR_ANIM_DELAY * len(predator_frames)
+
+
+        self.max_velocity = c.PREDATOR_HUNT_MAX_VELOCITY if self.target else c.PREDATOR_MAX_VELOCITY
+
 
         if self.target:
 

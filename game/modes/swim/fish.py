@@ -61,6 +61,14 @@ class Fish(game.PhysicsEntity):
 
         snd_squared = c.SWARM_NEIGHBOR_DISTANCE ** 2
 
+
+        flee_from_predator_sum = m.Vector(0, 0)
+        pd_squared = c.FISH_AVOID_PREDATOR_DISTANCE ** 2
+        predators = [ p for p in self.swarm.mode.predators if (p.position - self.position).length_squared < pd_squared]
+        for p in predators:
+            flee_from_predator_sum += (self.position - p.position)
+
+
         neighbors = [ n for n in self.swarm.fishes if (n.position - self.position).length_squared < snd_squared]
         neighbors_direction = sum(  (n.angle + 2*math.pi) % (2*math.pi) for n in neighbors ) / len(neighbors)
 
@@ -69,7 +77,7 @@ class Fish(game.PhysicsEntity):
         fd_squared = c.FISH_FOOD_DISTANCE ** 2
 
         foods = [ f for f in self.mode.foods if (f.position - self.position).length_squared < fd_squared]
-        if foods:
+        if foods and go_to_swarm.length < c.SWARM_MAX_DISTANCE:
             closest_food = sorted(foods, key=lambda f: (f.position - self.position).length_squared)[0]
 
             go_to_swarm = closest_food.position - self.position
@@ -78,9 +86,9 @@ class Fish(game.PhysicsEntity):
                 go_to_swarm = m.VECTOR_NULL
 
             if go_to_swarm.length < c.FISH_EAT_DISTANCE:
-                closest_food.nutrition_value -= 1
-                self.modify_food(1)
-                self.mode.food_eaten += 1
+                closest_food.nutrition_value -= c.FISH_EAT_DAMAGE
+                self.modify_food(c.FISH_EAT_DAMAGE)
+                self.mode.food_eaten += c.FISH_EAT_DAMAGE
 
                 self.mode.game.audio.play("eat")
 
@@ -100,7 +108,7 @@ class Fish(game.PhysicsEntity):
             if repel.length_squared <= rd_squared:
                 repel_sum += repel * ( c.FISH_REPEL_STRENGTH / (1 + repel.length))
 
-        self.target_direction = go_to_swarm * c.FISH_W_GO_TO_SWARM + repel_sum * c.FISH_W_REPEL
+        self.target_direction = flee_from_predator_sum +  go_to_swarm * c.FISH_W_GO_TO_SWARM + repel_sum * c.FISH_W_REPEL
         self.target_direction = self.target_direction.clamp()
 
         move_angle = math.atan2(self.target_direction.y, self.target_direction.x)
