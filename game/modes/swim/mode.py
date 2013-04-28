@@ -1,4 +1,6 @@
 import pygame
+from pygame.locals import *
+
 import itertools
 import random
 import math
@@ -115,6 +117,17 @@ class SwimMode(game.Mode):
 
 
     def update(self, time_elapsed):
+
+        if self.game.keys[K_a]:
+            self.swarm.swarm_mode = -1
+
+        if self.game.keys[K_s]:
+            self.swarm.swarm_mode = 0
+
+        if self.game.keys[K_d]:
+            self.swarm.swarm_mode = 1
+
+
         self.camera.update(time_elapsed)
         self.mouse_pos_world = self.game.mouse_pos + self.camera.position
         self.swarm.target_position = self.mouse_pos_world
@@ -144,7 +157,6 @@ class SwimMode(game.Mode):
             d.render()
 
         self.camera.render()
-        self.swarm.render()
 
         for s in self.shore:
             s.render()
@@ -154,6 +166,9 @@ class SwimMode(game.Mode):
 
         for p in self.predators:
             p.render()
+
+
+        self.swarm.render()
 
         if self.swarm.fishes:
             self.render_gui()

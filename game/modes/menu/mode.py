@@ -41,12 +41,16 @@ class MenuMode(game.Mode):
         def instructions():
             self.game.mode = game.modes.info.mode.InfoMode(self.game, pygame.image.load("data/images/instructions.png").convert_alpha())
 
+        def maneuvers():
+            self.game.mode = game.modes.info.mode.InfoMode(self.game, pygame.image.load("data/images/maneuvers.png").convert_alpha())
+
         def about():
             self.game.mode = game.modes.info.mode.InfoMode(self.game, pygame.image.load("data/images/about.png").convert_alpha())
 
         self.buttons = [
             {"title": "Play", "action": play},
             {"title": "Instructions", "action": instructions},
+            {"title": "Maneuvers", "action": maneuvers},
             {"title": "About", "action": about},
         ]
 

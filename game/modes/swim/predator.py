@@ -54,6 +54,9 @@ class Predator(game.PhysicsEntity):
 
             go_to_prey = self.target.position - self.position
 
+            if new_target.swarm.swarm_mode == -1:
+                go_to_prey = go_to_prey * -1
+
         neighbors = [ p for p in self.mode.predators if (p.position - self.position).length < c.PREDATOR_REPEL_DISTANCE ]
         repel_sum = m.Vector(0, 0)
         for n in neighbors:

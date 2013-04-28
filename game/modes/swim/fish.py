@@ -108,7 +108,15 @@ class Fish(game.PhysicsEntity):
 
 
         repel_sum = m.Vector(0, 0)
+
+
         rd_squared = c.SWARM_NEIGHBOR_REPEL_DISTANCE ** 2
+
+        if self.swarm.swarm_mode == -1:
+            rd_squared = c.SWARM_NEIGHBOR_REPEL_DISTANCE_SMALL ** 2
+        elif self.swarm.swarm_mode == 1:
+            rd_squared = c.SWARM_NEIGHBOR_REPEL_DISTANCE_LARGE ** 2
+
         for n in neighbors:
             repel = self.position - n.position
             if repel.length_squared <= rd_squared:
