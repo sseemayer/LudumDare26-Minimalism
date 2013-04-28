@@ -17,6 +17,7 @@ import food
 import predator
 import shore
 import decoration
+import trawl
 
 import game.world
 
@@ -43,6 +44,7 @@ class SwimMode(game.Mode):
         self.predators = []
         self.shore = []
         self.decorations = []
+        self.trawl = None
 
         self.active_sectors = set()
         self.change_sector(c.START_SECTOR[0], c.START_SECTOR[1])
@@ -52,6 +54,7 @@ class SwimMode(game.Mode):
 
         self.cursor = pygame.image.load("data/images/cursor.png").convert_alpha()
         self.cursor_size = m.Vector(self.cursor.get_width(), self.cursor.get_height())
+
 
 
     def fill_sector(self, x, y):
@@ -107,7 +110,21 @@ class SwimMode(game.Mode):
         self.color = game.world.data['WORLD'].get_at((x, y))
         self.depth = game.world.depth((x,y))
 
+        print(self.depth)
+
+
         self.sector_history.append((x, y))
+
+        if not self.trawl:
+            p_trawl = c.TRAWL_PROBABILITY(self.depth)
+            if random.random() < p_trawl:
+                self.spawn_trawl()
+
+
+    def spawn_trawl(self):
+        trawl_dir = u.random_dir(1, 1)
+        self.trawl = trawl.Trawl(self, self.swarm.position + trawl_dir * c.TRAWL_DISTANCE, trawl_dir * -1)
+
 
     def get_sector(self, e):
         return (
@@ -127,6 +144,8 @@ class SwimMode(game.Mode):
         if self.game.keys[K_d]:
             self.swarm.swarm_mode = 1
 
+        if self.game.keys[K_t]:
+            self.spawn_trawl()
 
         self.camera.update(time_elapsed)
         self.mouse_pos_world = self.game.mouse_pos + self.camera.position
@@ -139,6 +158,12 @@ class SwimMode(game.Mode):
             self.change_sector(secX, secY)
 
         self.swarm.update(time_elapsed)
+
+        if self.trawl:
+            self.trawl.update(time_elapsed)
+
+            if (self.trawl.position  - self.swarm.position).length > 10 * c.TRAWL_DISTANCE:
+                self.trawl = None
 
         for p in self.predators:
             p.update(time_elapsed)
@@ -167,8 +192,10 @@ class SwimMode(game.Mode):
         for p in self.predators:
             p.render()
 
-
         self.swarm.render()
+
+        if self.trawl:
+            self.trawl.render()
 
         if self.swarm.fishes:
             self.render_gui()
