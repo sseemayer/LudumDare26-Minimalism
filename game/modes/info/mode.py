@@ -11,45 +11,39 @@ import game
 import game.constants as c
 import game.util as u
 
-import game.modes.swim.mode
-import game.modes.info.mode
+import game.world
 
 import pyhiero.pygamefont as pgf
+import glyph
 
-class MenuMode(game.Mode):
+class InfoMode(game.Mode):
 
-    def __init__(self, g):
+    def __init__(self, g, info_surf):
         game.Mode.__init__(self, g)
 
-
         self.background = pygame.image.load("data/images/splash_bg.png")
+        self.info_surf = info_surf
+
+        self.main_font = pgf.PyGameHieroFont("data/fonts/Antic_22.fnt")
+
         self.cursor = pygame.image.load("data/images/cursor.png")
+        self.cursor_size = m.Vector(self.cursor.get_width(), self.cursor.get_height())
+
         self.button = pygame.image.load("data/images/button.png")
         self.button_hover = pygame.image.load("data/images/button_hover.png")
+        self.button_size = m.Vector(self.button.get_width(), self.button.get_height())
+
         self.logo = pygame.image.load("data/images/logo.png")
         self.logo_blur = pygame.image.load("data/images/logo_blur.png")
         self.logo_blur.fill((0,0,0), special_flags = BLEND_MULT)
 
-        self.main_font = pgf.PyGameHieroFont("data/fonts/Antic_22.fnt")
 
-
-        self.button_size = m.Vector(self.button.get_width(), self.button.get_height())
-
-        def play():
-            self.game.mode = game.modes.swim.mode.SwimMode(self.game)
-
-        def instructions():
-            self.game.mode = game.modes.info.mode.InfoMode(self.game, pygame.image.load("data/images/instructions.png"))
-
-        def about():
-            self.game.mode = game.modes.info.mode.InfoMode(self.game, pygame.image.load("data/images/about.png"))
+        def menu():
+            self.game.mode = game.modes.menu.mode.MenuMode(self.game)
 
         self.buttons = [
-            {"title": "Play", "action": play},
-            {"title": "Instructions", "action": instructions},
-            {"title": "About", "action": about},
+            {"title": "Main Menu", "action": menu}
         ]
-
 
         for i, btn in enumerate(self.buttons):
             surf = pygame.Surface(self.button_size.as_tuple(), flags=SRCALPHA)
@@ -74,13 +68,12 @@ class MenuMode(game.Mode):
             btn['surf_shadow'] = surf_shadow
             btn['hsurf'] = hsurf
             btn['hsurf_shadow'] = hsurf_shadow
-            btn['pos'] = m.Vector(c.SCREEN_DIMENSIONS.x / 2, 230 + 60 * i)
+            btn['pos'] = m.Vector(self.button_size.x / 2 + 20 + (10 + self.button_size.x) * i, c.SCREEN_DIMENSIONS.y - self.button_size.y )
 
 
         self.selected_button = None
 
-        #self.surf_game_over = self.header_font.render("Travel Log")
-        #self.surf_keys = self.main_font.render("(R): Retry", color=(255,0,0))
+        overlay_pos = c.SCREEN_DIMENSIONS / 2 - c.GAMEOVER_DIMENSIONS / 2
 
 
     def click(self):
@@ -99,10 +92,12 @@ class MenuMode(game.Mode):
                    self.selected_button = i
                    break
 
-
     def render(self):
         scr = self.game.screen
+
         scr.blit(self.background, (0,0))
+        scr.blit(self.info_surf, (0,0))
+
 
         logo_pos = m.Vector(c.SCREEN_DIMENSIONS.x / 2, 100)
 
@@ -120,8 +115,4 @@ class MenuMode(game.Mode):
                 scr.blit(btn['surf_shadow'], (btn['pos'] + shadow - self.button_size / 2).as_tuple())
                 scr.blit(btn['surf'], (btn['pos'] - self.button_size / 2).as_tuple())
 
-
-        scr.blit(self.cursor, (self.game.mouse_pos - m.Vector(self.cursor.get_width() / 2, self.cursor.get_height() / 2)).as_tuple())
-
-        #scr.blit(self.surf_game_over, m.Vector(c.SCREEN_DIMENSIONS.x / 2 - self.surf_game_over.get_width() / 2, overlay_pos.y + 20).as_tuple())
-
+        scr.blit(self.cursor, (self.game.mouse_pos - self.cursor_size / 2).as_tuple())
