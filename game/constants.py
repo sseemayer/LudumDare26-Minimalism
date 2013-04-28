@@ -1,7 +1,7 @@
 import py2d.Math as m
 import random
 
-GAME_TITLE = 'Migration - Ludum Dare 26 entry by semi'
+GAME_TITLE = 'The Migration'
 SCREEN_DIMENSIONS = m.Vector(640, 480)
 GAMEOVER_DIMENSIONS = m.Vector(640, 400)
 WORLDMAP_SCALE = 1.2

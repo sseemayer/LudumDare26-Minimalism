@@ -19,6 +19,7 @@ class Game(object):
         pygame.init()
         self.screen = pygame.display.set_mode(c.SCREEN_DIMENSIONS.as_tuple())
         pygame.display.set_caption(c.GAME_TITLE)
+        pygame.display.set_icon(pygame.image.load("data/images/icon.png"))
         pygame.mouse.set_visible(False)
 
         self.running = True
