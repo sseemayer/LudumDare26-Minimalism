@@ -95,10 +95,13 @@ class Fish(game.PhysicsEntity):
 
                 self.mode.game.audio.play("eat")
 
-                color_ratio = 1 / self.food
+                if self.food:
+                    color_ratio = 1 / self.food
 
-                for i in range(3):
-                    self.color[i] = (1-color_ratio) * self.color[i] + color_ratio * closest_food.color[i]
+                    for i in range(3):
+                        self.color[i] = (1-color_ratio) * self.color[i] + color_ratio * closest_food.color[i]
+                        if self.color[i] > 255: self.color[i] = 255
+                        if self.color[i] < 0: self.color[i] = 0
 
                 if closest_food.nutrition_value <= 0:
                     self.mode.foods.remove(closest_food)
