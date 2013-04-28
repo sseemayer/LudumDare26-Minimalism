@@ -71,8 +71,11 @@ class Fish(game.PhysicsEntity):
             closest_food = sorted(foods, key=lambda f: (f.position - self.position).length_squared)[0]
 
             go_to_swarm = closest_food.position - self.position
+
             if go_to_swarm.length < c.FISH_EAT_DISTANCE * 0.2:
                 go_to_swarm = m.VECTOR_NULL
+
+            if go_to_swarm.length < c.FISH_EAT_DISTANCE:
                 closest_food.nutrition_value -= 1
                 self.modify_food(1)
                 self.mode.food_eaten += 1

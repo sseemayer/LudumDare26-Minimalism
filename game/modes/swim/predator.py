@@ -20,6 +20,9 @@ class Predator(game.PhysicsEntity):
         self.target = None
         self.anim_timer = random.uniform(0, len(predator_frames)) * c.PREDATOR_ANIM_DELAY
 
+        self.random_walk_direction = m.Vector(0, 0)
+        self.new_random_walk_dir()
+
     def apply_force(self):
 
 
@@ -37,7 +40,7 @@ class Predator(game.PhysicsEntity):
         if self.target:
             preys.append(self.target)
 
-        go_to_prey = u.random_dir() * 10000
+        go_to_prey = self.random_walk_direction
         if preys:
             self.target = sorted(preys, key=lambda p: (p.position - self.position).length_squared)[0]
             go_to_prey = self.target.position - self.position
@@ -61,9 +64,14 @@ class Predator(game.PhysicsEntity):
 
         self.acceleration += acc *  (acc * self.target_direction.clamp()) * c.PREDATOR_ACCELERATION
 
+    def new_random_walk_dir(self):
+        self.random_walk_direction = u.random_dir() * c.PREDATOR_RANDOM_WALK_RADIUS
 
     def update(self, time_elapsed):
         game.PhysicsEntity.update(self, time_elapsed)
+
+        if random.random() < time_elapsed * c.PREDATOR_RANDOM_WALK_CHANCE :
+            self.new_random_walk_dir()
 
 
         self.anim_timer += time_elapsed * self.acceleration.length
