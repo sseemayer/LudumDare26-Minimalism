@@ -29,6 +29,13 @@ class Swarm(game.PhysicsEntity):
         for f in self.fishes:
             f.update(time_elapsed)
 
+    def valid_position(self):
+
+        secX, secY = self.mode.get_sector(self)
+        if not game.world.depth((secX, secY)):
+            return False
+        return True
+
     def render(self):
         scr = self.mode.game.screen
         cam = self.mode.camera.position

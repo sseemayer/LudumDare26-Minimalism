@@ -40,6 +40,9 @@ class PhysicsEntity(Entity):
     def apply_force(self):
         pass
 
+    def valid_position(self):
+        return True
+
     def update(self, time_elapsed):
         self.force.x = 0
         self.force.y = 0
@@ -65,7 +68,11 @@ class PhysicsEntity(Entity):
         if self.velocity.length > self.max_velocity:
             self.velocity = self.velocity.normalize() * self.max_velocity
 
+        last_position = self.position
         self.position += self.velocity * time_elapsed
+        if not self.valid_position():
+            self.position = last_position
+
         self.angle += self.angular_velocity * time_elapsed
         self.angle %= 2 * math.pi
 
