@@ -56,7 +56,7 @@ class DeathMode(game.Mode):
         self.g_stats = glyph.Glyph(g_rect, bkg=pygame.Color(0,0,0,0), font=self.main_font)
         self.g_stats.image = pygame.Surface(g_rect.size, flags=SRCALPHA)
         self.g_stats.image.fill(pygame.Color(0,0,0,0))
-        self.g_stats.input("Before dieing, you have travelled {distance} m, eaten {food} kg of food and had {fishies} fishies, {fishies_max} at one time.".format(**stats))
+        self.g_stats.input("Before dying, you have travelled {distance} m, eaten {food} kg of food and had {fishies} fishies, {fishies_max} at one time.".format(**stats))
         self.g_stats.update()
 
 

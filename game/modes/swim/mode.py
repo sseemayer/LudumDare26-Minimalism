@@ -48,6 +48,8 @@ class SwimMode(game.Mode):
         around_start = lambda e: (e.position - self.swarm.position).length > c.START_SAFEZONE
         self.predators = [ p for p in self.predators if around_start(p)]
 
+        self.cursor = pygame.image.load("data/images/cursor.png")
+        self.cursor_size = m.Vector(self.cursor.get_width(), self.cursor.get_height())
 
 
     def fill_sector(self, x, y):
@@ -153,7 +155,8 @@ class SwimMode(game.Mode):
         for p in self.predators:
             p.render()
 
-        self.render_gui()
+        if self.swarm.fishes:
+            self.render_gui()
 
     def render_gui(self):
         scr = self.game.screen
@@ -161,7 +164,10 @@ class SwimMode(game.Mode):
 
         tl = m.Vector(c.SECTOR_SIZE.x * (self.sector_x - c.START_SECTOR[0]), c.SECTOR_SIZE.y * (self.sector_y-c.START_SECTOR[1])) - cam
 
-        game.world.render(scr, (0, 0), (self.sector_x, self.sector_y))
+        pygame.draw.rect(scr, (255, 255, 255), ((9, 9), (game.world.WORLD_WINDOW[0] + 2, game.world.WORLD_WINDOW[1] + 2)))
+        game.world.render(scr, (10, 10), (self.sector_x, self.sector_y))
+
+        scr.blit(self.cursor, (self.mouse_pos_world - cam - self.cursor_size / 2).as_tuple())
 
         #u.draw_line(scr, tl, m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y))
         #u.draw_line(scr, m.Vector(tl.x, tl.y + c.SECTOR_SIZE.y), m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y + c.SECTOR_SIZE.y))

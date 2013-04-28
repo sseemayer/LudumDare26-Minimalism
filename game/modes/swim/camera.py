@@ -14,8 +14,6 @@ class Camera(game.PhysicsEntity):
         super(Camera, self).__init__(mode, position, direction, max_velocity=c.CAMERA_MAX_VELOCITY, velocity_decay=c.CAMERA_VELOCITY_DECAY)
 
         self.offset = c.SCREEN_DIMENSIONS / 2
-        self.cursor = pygame.image.load("data/images/cursor.png")
-        self.cursor_size = m.Vector(self.cursor.get_width(), self.cursor.get_height())
 
     def apply_force(self):
         delta_pos = self.mode.swarm.position - self.position - self.offset
@@ -34,6 +32,5 @@ class Camera(game.PhysicsEntity):
         #u.draw_text(self.mode.game.screen, m.Vector(80, 40), "Sector: {} {}".format(self.mode.sector_x, self.mode.sector_y))
 
 
-        scr.blit(self.cursor, (self.mode.mouse_pos_world - self.position - self.cursor_size / 2).as_tuple())
 
         pass
