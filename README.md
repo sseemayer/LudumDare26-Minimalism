@@ -8,10 +8,11 @@ As soon as you get out into the open water, the game will become more difficult.
 
 ## Controls
 
-  Mouse   Steer
-  A       Assemble swarm
-  S       Standard formation
-  D       Disperse swarm
+    Mouse   Steer
+    
+    A       Assemble swarm
+    S       Standard formation
+    D       Disperse swarm
 
 ## Installation and Running
 
