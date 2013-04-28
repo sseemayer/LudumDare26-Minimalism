@@ -10,6 +10,13 @@ V_11 = m.Vector(1, 1)
 pygame.font.init()
 DEBUG_FONT = pygame.font.Font( pygame.font.get_default_font(), 12)
 
+def random_hue(h_min=0, h_max=360, s_min=0, s_max=100, v=100, a=100):
+    hue = random.uniform(h_min, h_max)
+    s = random.uniform(s_min, s_max)
+    clr = pygame.Color(0)
+    clr.hsva = (hue, s, v, a)
+    return clr
+
 def random_dir(min_radius = 0.1, max_radius = 1, min_angle = 0, max_angle = 2 * math.pi):
 
     radius = random.uniform(min_radius, max_radius)

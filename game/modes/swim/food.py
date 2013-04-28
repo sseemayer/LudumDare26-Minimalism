@@ -1,4 +1,6 @@
 import pygame
+from pygame.locals import *
+
 import game
 import game.util as u
 import game.constants as c
@@ -20,6 +22,7 @@ class Food(game.PhysicsEntity):
         if nutrition_value == None:
             nutrition_value = random.gammavariate(c.FOOD_NUTRITION_VALUE, c.FOOD_NUTRITION_VALUE_VAR)
 
+        self.color = u.random_hue(h_min=80, h_max=270)
         self.nutrition_value = nutrition_value
         self.angle = random.uniform(0, 360)
 
@@ -34,7 +37,10 @@ class Food(game.PhysicsEntity):
         cam = self.mode.camera.position
 
         spr_zoom = pygame.transform.rotozoom(sprite, self.angle, 0.3 * math.sqrt(self.nutrition_value))
+        spr_zoom.fill(self.color, special_flags=BLEND_MULT)
+
         spr_dim = m.Vector(spr_zoom.get_width(), spr_zoom.get_height())
+
 
 
         scr.blit(spr_zoom, (self.position - cam - spr_dim / 2).as_tuple())
