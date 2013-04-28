@@ -75,6 +75,9 @@ PREDATOR_MAX_ANGULAR_VELOCITY = 0.4
 PREDATOR_ANGULAR_VELOCITY_DECAY = 0.9
 PREDATOR_VELOCITY_DECAY = 0.8
 
+PREDATOR_ANIM_DELAY = 0.05
+PREDATOR_SCALE = 0.5
+
 
 SECTOR_PREDATORS = lambda depth: int(random.gammavariate(depth * 10, 1))
 SECTOR_FOOD = lambda depth: int(random.gammavariate((1-depth) * 100, 0.1))

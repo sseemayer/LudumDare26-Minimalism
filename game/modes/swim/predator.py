@@ -1,3 +1,6 @@
+import pygame
+from pygame.locals import *
+
 import game
 import game.util as u
 import game.constants as c
@@ -7,12 +10,15 @@ import py2d.Math as m
 import math
 import random
 
+predator_frames = [pygame.image.load("data/images/predator_{}.png".format(i)) for i in range(8)]
+
 class Predator(game.PhysicsEntity):
 
     def __init__(self, mode, position=m.Vector(0, 0), direction=m.Vector(0, 0)):
         super(Predator, self).__init__(mode, position, direction, max_velocity=c.PREDATOR_MAX_VELOCITY, max_angular_velocity=c.PREDATOR_MAX_ANGULAR_VELOCITY, velocity_decay=c.PREDATOR_VELOCITY_DECAY, angular_velocity_decay=c.PREDATOR_ANGULAR_VELOCITY_DECAY )
 
         self.target = None
+        self.anim_timer = random.uniform(0, len(predator_frames)) * c.PREDATOR_ANIM_DELAY
 
     def apply_force(self):
 
@@ -59,6 +65,10 @@ class Predator(game.PhysicsEntity):
     def update(self, time_elapsed):
         game.PhysicsEntity.update(self, time_elapsed)
 
+
+        self.anim_timer += time_elapsed * self.acceleration.length
+        self.anim_timer %= c.PREDATOR_ANIM_DELAY * len(predator_frames)
+
         if self.target:
 
             if self.target.food <= 0:
@@ -80,7 +90,19 @@ class Predator(game.PhysicsEntity):
     def render(self):
         scr = self.mode.game.screen
         cam = self.mode.camera.position
-        u.draw_pos_dir(scr, self.position - cam, self.direction * 20, color=(255, 0, 0))
 
-        if self.target:
-            u.draw_line(scr, self.position - cam, self.target.position - cam, color=(255, 0, 0))
+
+        frame = int(self.anim_timer / c.PREDATOR_ANIM_DELAY)
+
+        sprite_stretch = pygame.transform.rotozoom(predator_frames[frame], -self.angle / math.pi * 180, c.PREDATOR_SCALE)
+
+        #sprite_stretch.fill(self.color, special_flags=BLEND_MULT)
+
+        sprite_dim = m.Vector(sprite_stretch.get_width(), sprite_stretch.get_height())
+
+        scr.blit(sprite_stretch, (self.position - cam - sprite_dim / 2).as_tuple())
+
+        #u.draw_pos_dir(scr, self.position - cam, self.direction * 20, color=(255, 0, 0))
+
+        #if self.target:
+        #    u.draw_line(scr, self.position - cam, self.target.position - cam, color=(255, 0, 0))

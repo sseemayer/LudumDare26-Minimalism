@@ -12,7 +12,7 @@ import random
 
 import food
 
-fish_frames = [pygame.image.load("data/images/fish_{}.png".format(i)) for i in range(4)]
+fish_frames = [pygame.image.load("data/images/fish_{}.png".format(i)) for i in range(8)]
 
 class Fish(game.PhysicsEntity):
 
@@ -126,7 +126,7 @@ class Fish(game.PhysicsEntity):
 
         frame = int(self.anim_timer / c.FISH_ANIM_DELAY)
 
-        sprite_stretch = pygame.transform.rotozoom(fish_frames[frame], -self.angle / math.pi * 180, 0.1 + math.sqrt(self.food / c.FISH_BABY_COST))
+        sprite_stretch = pygame.transform.rotozoom(fish_frames[frame], -self.angle / math.pi * 180, math.sqrt(self.food / c.FISH_BABY_THRESHOLD))
 
         sprite_stretch.fill(self.color, special_flags=BLEND_MULT)
 

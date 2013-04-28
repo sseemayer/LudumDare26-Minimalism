@@ -14,6 +14,8 @@ import camera
 import food
 import predator
 import shore
+import decoration
+
 import game.world
 
 import game.modes.death.mode
@@ -38,6 +40,7 @@ class SwimMode(game.Mode):
         self.foods = []
         self.predators = []
         self.shore = []
+        self.decorations = []
 
         self.active_sectors = set()
         self.change_sector(c.START_SECTOR[0], c.START_SECTOR[1])
@@ -62,6 +65,8 @@ class SwimMode(game.Mode):
             self.predators.extend(predator.Predator(self, uniform_point()) for _ in range(n_predators))
             self.foods.extend(food.Food(self, uniform_point()) for _ in range(n_food))
 
+            self.decorations.append(decoration.Decoration(self, (x*y) % len(decoration.Decoration.sprites), tl + c.SECTOR_SIZE/2 ))
+
             #print("Sector {}, {} (depth {}): Added {} predators and {} food items".format(x, y, depth, n_predators, n_food))
 
         else:
@@ -85,6 +90,7 @@ class SwimMode(game.Mode):
         np = len(self.predators)
         self.foods = [f for f in self.foods if in_range(f)]
         self.predators = [p for p in self.predators if in_range(p) or p.target]
+        self.decorations = [d for d in self.decorations if in_range(d)]
 
 
         #print("foods: {} (before: {}), predators: {} (before: {})".format(len(self.foods), nf, len(self.predators), np))
@@ -131,6 +137,9 @@ class SwimMode(game.Mode):
         scr = self.game.screen
 
         scr.fill(self.color)
+
+        for d in self.decorations:
+            d.render()
 
         self.camera.render()
         self.swarm.render()

@@ -30,7 +30,7 @@ class WorldmapMode(game.Mode):
         self.world = pygame.image.load("data/images/world.png")
 
         for x_from, x_to in zip(self.swim_mode.sector_history, self.swim_mode.sector_history[1:]):
-            pygame.draw.line(self.world, (255, 0, 0), x_from, x_to)
+            pygame.draw.line(self.world, (255, 128, 0), x_from, x_to)
 
         self.world = pygame.transform.scale(self.world, (int(self.world.get_width() * c.WORLDMAP_SCALE), int(self.world.get_height() * c.WORLDMAP_SCALE)) )
         self.world_size = m.Vector(self.world.get_width(), self.world.get_height())
