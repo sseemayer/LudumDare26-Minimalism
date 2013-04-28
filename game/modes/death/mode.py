@@ -30,7 +30,7 @@ class DeathMode(game.Mode):
         self.overlay_surf = pygame.Surface(c.GAMEOVER_DIMENSIONS.as_tuple(), flags=SRCALPHA)
         self.overlay_surf.fill((0,0,0,200))
 
-        self.fishbones = pygame.image.load("data/images/fishbones.png")
+        self.fishbones = pygame.image.load("data/images/fishbones.png").convert_alpha()
         self.fishbones = pygame.transform.scale(self.fishbones, (self.fishbones.get_width() * 4, self.fishbones.get_height() * 4) )
         self.fishbones_size = m.Vector(self.fishbones.get_width(), self.fishbones.get_height())
 
@@ -40,12 +40,12 @@ class DeathMode(game.Mode):
         self.surf_game_over = self.header_font.render("Game Over")
         self.surf_message = self.main_font.render(self.message)
 
-        self.cursor = pygame.image.load("data/images/cursor.png")
+        self.cursor = pygame.image.load("data/images/cursor.png").convert_alpha()
         self.cursor_size = m.Vector(self.cursor.get_width(), self.cursor.get_height())
 
 
-        self.button = pygame.image.load("data/images/button.png")
-        self.button_hover = pygame.image.load("data/images/button_hover.png")
+        self.button = pygame.image.load("data/images/button.png").convert_alpha()
+        self.button_hover = pygame.image.load("data/images/button_hover.png").convert_alpha()
         self.button_size = m.Vector(self.button.get_width(), self.button.get_height())
 
 

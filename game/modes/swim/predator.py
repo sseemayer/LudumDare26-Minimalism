@@ -10,15 +10,19 @@ import py2d.Math as m
 import math
 import random
 
-predator_frames = [pygame.image.load("data/images/predator_{}.png".format(i)) for i in range(8)]
 
 class Predator(game.PhysicsEntity):
+    frames = None
 
     def __init__(self, mode, position=m.Vector(0, 0), direction=m.Vector(0, 0)):
         super(Predator, self).__init__(mode, position, direction, max_velocity=c.PREDATOR_MAX_VELOCITY, max_angular_velocity=c.PREDATOR_MAX_ANGULAR_VELOCITY, velocity_decay=c.PREDATOR_VELOCITY_DECAY, angular_velocity_decay=c.PREDATOR_ANGULAR_VELOCITY_DECAY )
 
+        if not Predator.frames:
+            Predator.frames = [pygame.image.load("data/images/predator_{}.png".format(i)).convert_alpha() for i in range(8)]
+
+
         self.target = None
-        self.anim_timer = random.uniform(0, len(predator_frames)) * c.PREDATOR_ANIM_DELAY
+        self.anim_timer = random.uniform(0, len(Predator.frames)) * c.PREDATOR_ANIM_DELAY
 
         self.random_walk_direction = m.Vector(0, 0)
         self.new_random_walk_dir()
@@ -81,7 +85,7 @@ class Predator(game.PhysicsEntity):
 
 
         self.anim_timer += time_elapsed * self.acceleration.length
-        self.anim_timer %= c.PREDATOR_ANIM_DELAY * len(predator_frames)
+        self.anim_timer %= c.PREDATOR_ANIM_DELAY * len(Predator.frames)
 
 
         self.max_velocity = c.PREDATOR_HUNT_MAX_VELOCITY if self.target else c.PREDATOR_MAX_VELOCITY
@@ -113,7 +117,7 @@ class Predator(game.PhysicsEntity):
 
         frame = int(self.anim_timer / c.PREDATOR_ANIM_DELAY)
 
-        sprite_stretch = pygame.transform.rotozoom(predator_frames[frame], -self.angle / math.pi * 180, c.PREDATOR_SCALE)
+        sprite_stretch = pygame.transform.rotozoom(Predator.frames[frame], -self.angle / math.pi * 180, c.PREDATOR_SCALE)
 
         #sprite_stretch.fill(self.color, special_flags=BLEND_MULT)
 

@@ -12,12 +12,16 @@ import random
 import fish
 
 
-sprites = [pygame.image.load("data/images/plankton_{}.png".format(i)) for i in range(2)]
 
 class Food(game.PhysicsEntity):
 
+    sprites = None
+
     def __init__(self, mode, position=m.Vector(0, 0), direction=m.Vector(0, 0), nutrition_value=None):
         super(Food, self).__init__(mode, position, direction)
+
+        if not Food.sprites:
+            Food.sprites = [pygame.image.load("data/images/plankton_{}.png".format(i)).convert_alpha() for i in range(2)]
 
         if nutrition_value == None:
             nutrition_value = random.gammavariate(c.FOOD_NUTRITION_VALUE, c.FOOD_NUTRITION_VALUE_VAR)
@@ -25,7 +29,7 @@ class Food(game.PhysicsEntity):
         self.color = u.random_hue(h_min=80, h_max=270)
         self.nutrition_value = nutrition_value
         self.angle = random.uniform(0, 360)
-        self.which = random.choice(range(len(sprites)))
+        self.which = random.choice(range(len(Food.sprites)))
 
     def apply_force(self):
         pass
@@ -37,7 +41,7 @@ class Food(game.PhysicsEntity):
         scr = self.mode.game.screen
         cam = self.mode.camera.position
 
-        spr_zoom = pygame.transform.rotozoom(sprites[self.which], self.angle, 0.3 * math.sqrt(self.nutrition_value))
+        spr_zoom = pygame.transform.rotozoom(Food.sprites[self.which], self.angle, 0.3 * math.sqrt(self.nutrition_value))
         spr_zoom.fill(self.color, special_flags=BLEND_MULT)
 
         spr_dim = m.Vector(spr_zoom.get_width(), spr_zoom.get_height())

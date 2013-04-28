@@ -22,12 +22,12 @@ class MenuMode(game.Mode):
         game.Mode.__init__(self, g)
 
 
-        self.background = pygame.image.load("data/images/splash_bg.png")
-        self.cursor = pygame.image.load("data/images/cursor.png")
-        self.button = pygame.image.load("data/images/button.png")
-        self.button_hover = pygame.image.load("data/images/button_hover.png")
-        self.logo = pygame.image.load("data/images/logo.png")
-        self.logo_blur = pygame.image.load("data/images/logo_blur.png")
+        self.background = pygame.image.load("data/images/splash_bg.png").convert()
+        self.cursor = pygame.image.load("data/images/cursor.png").convert_alpha()
+        self.button = pygame.image.load("data/images/button.png").convert_alpha()
+        self.button_hover = pygame.image.load("data/images/button_hover.png").convert_alpha()
+        self.logo = pygame.image.load("data/images/logo.png").convert_alpha()
+        self.logo_blur = pygame.image.load("data/images/logo_blur.png").convert_alpha()
         self.logo_blur.fill((0,0,0), special_flags = BLEND_MULT)
 
         self.main_font = pgf.PyGameHieroFont("data/fonts/Antic_22.fnt")
@@ -39,10 +39,10 @@ class MenuMode(game.Mode):
             self.game.mode = game.modes.swim.mode.SwimMode(self.game)
 
         def instructions():
-            self.game.mode = game.modes.info.mode.InfoMode(self.game, pygame.image.load("data/images/instructions.png"))
+            self.game.mode = game.modes.info.mode.InfoMode(self.game, pygame.image.load("data/images/instructions.png").convert_alpha())
 
         def about():
-            self.game.mode = game.modes.info.mode.InfoMode(self.game, pygame.image.load("data/images/about.png"))
+            self.game.mode = game.modes.info.mode.InfoMode(self.game, pygame.image.load("data/images/about.png").convert_alpha())
 
         self.buttons = [
             {"title": "Play", "action": play},

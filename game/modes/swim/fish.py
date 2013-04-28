@@ -12,18 +12,21 @@ import random
 
 import food
 
-fish_frames = [pygame.image.load("data/images/fish_{}.png".format(i)) for i in range(8)]
 
 class Fish(game.PhysicsEntity):
+    frames = None
 
     def __init__(self, swarm, position=m.Vector(0, 0), direction=m.Vector(0, 0), color=[255, 255, 255]):
         super(Fish, self).__init__(swarm.mode, position, direction, max_velocity=c.FISH_MAX_VELOCITY, max_angular_velocity=c.FISH_MAX_ANGULAR_VELOCITY, velocity_decay=c.FISH_VELOCITY_DECAY, angular_velocity_decay=c.FISH_ANGULAR_VELOCITY_DECAY)
+
+        if not Fish.frames:
+            Fish.frames = [pygame.image.load("data/images/fish_{}.png".format(i)).convert_alpha() for i in range(8)]
 
         self.swarm = swarm
         self.food = c.FISH_BABY_FOOD
         self.color = [cl for cl in color]
 
-        self.anim_timer = random.uniform(0, len(fish_frames)) * c.FISH_ANIM_DELAY
+        self.anim_timer = random.uniform(0, len(Fish.frames)) * c.FISH_ANIM_DELAY
 
     def modify_food(self, delta):
         self.food += delta
@@ -132,7 +135,7 @@ class Fish(game.PhysicsEntity):
         self.modify_food(-c.FISH_STARVATION * time_elapsed)
 
         self.anim_timer += time_elapsed * self.acceleration.length
-        self.anim_timer %= c.FISH_ANIM_DELAY * len(fish_frames)
+        self.anim_timer %= c.FISH_ANIM_DELAY * len(Fish.frames)
 
 
     def render(self):
@@ -141,7 +144,7 @@ class Fish(game.PhysicsEntity):
 
         frame = int(self.anim_timer / c.FISH_ANIM_DELAY)
 
-        sprite_stretch = pygame.transform.rotozoom(fish_frames[frame], -self.angle / math.pi * 180, math.sqrt(self.food / c.FISH_BABY_THRESHOLD))
+        sprite_stretch = pygame.transform.rotozoom(Fish.frames[frame], -self.angle / math.pi * 180, math.sqrt(self.food / c.FISH_BABY_THRESHOLD))
 
         sprite_stretch.fill(self.color, special_flags=BLEND_MULT)
 

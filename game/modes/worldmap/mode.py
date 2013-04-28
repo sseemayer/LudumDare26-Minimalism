@@ -27,7 +27,7 @@ class WorldmapMode(game.Mode):
         self.overlay_surf.fill((0,0,0,200))
 
 
-        self.world = pygame.image.load("data/images/world.png")
+        self.world = pygame.image.load("data/images/world.png").convert_alpha()
 
         for x_from, x_to in zip(self.swim_mode.sector_history, self.swim_mode.sector_history[1:]):
             pygame.draw.line(self.world, (255, 128, 0), x_from, x_to)
@@ -41,12 +41,12 @@ class WorldmapMode(game.Mode):
         self.surf_game_over = self.header_font.render("Travel Log")
         self.surf_keys = self.main_font.render("(R): Retry", color=(255,0,0))
 
-        self.cursor = pygame.image.load("data/images/cursor.png")
+        self.cursor = pygame.image.load("data/images/cursor.png").convert_alpha()
         self.cursor_size = m.Vector(self.cursor.get_width(), self.cursor.get_height())
 
 
-        self.button = pygame.image.load("data/images/button.png")
-        self.button_hover = pygame.image.load("data/images/button_hover.png")
+        self.button = pygame.image.load("data/images/button.png").convert_alpha()
+        self.button_hover = pygame.image.load("data/images/button_hover.png").convert_alpha()
         self.button_size = m.Vector(self.button.get_width(), self.button.get_height())
 
         def menu():

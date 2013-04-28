@@ -21,20 +21,20 @@ class InfoMode(game.Mode):
     def __init__(self, g, info_surf):
         game.Mode.__init__(self, g)
 
-        self.background = pygame.image.load("data/images/splash_bg.png")
+        self.background = pygame.image.load("data/images/splash_bg.png").convert()
         self.info_surf = info_surf
 
         self.main_font = pgf.PyGameHieroFont("data/fonts/Antic_22.fnt")
 
-        self.cursor = pygame.image.load("data/images/cursor.png")
+        self.cursor = pygame.image.load("data/images/cursor.png").convert_alpha()
         self.cursor_size = m.Vector(self.cursor.get_width(), self.cursor.get_height())
 
-        self.button = pygame.image.load("data/images/button.png")
-        self.button_hover = pygame.image.load("data/images/button_hover.png")
+        self.button = pygame.image.load("data/images/button.png").convert_alpha()
+        self.button_hover = pygame.image.load("data/images/button_hover.png").convert_alpha()
         self.button_size = m.Vector(self.button.get_width(), self.button.get_height())
 
-        self.logo = pygame.image.load("data/images/logo.png")
-        self.logo_blur = pygame.image.load("data/images/logo_blur.png")
+        self.logo = pygame.image.load("data/images/logo.png").convert_alpha()
+        self.logo_blur = pygame.image.load("data/images/logo_blur.png").convert_alpha()
         self.logo_blur.fill((0,0,0), special_flags = BLEND_MULT)
 
 

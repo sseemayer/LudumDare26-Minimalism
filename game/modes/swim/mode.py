@@ -48,7 +48,7 @@ class SwimMode(game.Mode):
         around_start = lambda e: (e.position - self.swarm.position).length > c.START_SAFEZONE
         self.predators = [ p for p in self.predators if around_start(p)]
 
-        self.cursor = pygame.image.load("data/images/cursor.png")
+        self.cursor = pygame.image.load("data/images/cursor.png").convert_alpha()
         self.cursor_size = m.Vector(self.cursor.get_width(), self.cursor.get_height())
 
 
@@ -67,12 +67,12 @@ class SwimMode(game.Mode):
             self.predators.extend(predator.Predator(self, uniform_point()) for _ in range(n_predators))
             self.foods.extend(food.Food(self, uniform_point()) for _ in range(n_food))
 
-            self.decorations.append(decoration.Decoration(self, (x*y) % len(decoration.Decoration.sprites), tl + c.SECTOR_SIZE/2 ))
+            self.decorations.append(decoration.Decoration(self, x*y, tl + c.SECTOR_SIZE/2 ))
 
             #print("Sector {}, {} (depth {}): Added {} predators and {} food items".format(x, y, depth, n_predators, n_food))
 
         else:
-            self.shore.append(shore.Shore(self, tl, game.world.WORLD.get_at((x,y))))
+            self.shore.append(shore.Shore(self, tl, game.world.data['WORLD'].get_at((x,y))))
 
     def change_sector(self, x, y):
 
@@ -102,7 +102,7 @@ class SwimMode(game.Mode):
         self.sector_x = x
         self.sector_y = y
 
-        self.color = game.world.WORLD.get_at((x, y))
+        self.color = game.world.data['WORLD'].get_at((x, y))
         self.depth = game.world.depth((x,y))
 
         self.sector_history.append((x, y))

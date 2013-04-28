@@ -13,11 +13,18 @@ import random
 
 class Decoration(game.Entity):
 
+    sprites = None
 
     def __init__(self, mode, which, position=m.Vector(0, 0), direction=m.Vector(0, 0)):
         super(Decoration, self).__init__(mode, position, direction)
 
-        self.which = which
+        if not Decoration.sprites:
+            Decoration.sprites = [ pygame.image.load("data/images/depth_{}.png".format(i)).convert_alpha() for i in range(7) ]
+            for s in Decoration.sprites:
+                s.fill((0,0,50), special_flags=BLEND_MULT)
+
+
+        self.which = which % len(Decoration.sprites)
 
     def apply_force(self):
         pass
@@ -38,7 +45,4 @@ class Decoration(game.Entity):
         #u.draw_cross(scr, self.position - cam, color=(255, 255, 0), radius = math.sqrt(self.nutrition_value))
 
 
-Decoration.sprites = [ pygame.image.load("data/images/depth_{}.png".format(i)) for i in range(7) ]
-for s in Decoration.sprites:
-    s.fill((0,0,50), special_flags=BLEND_MULT)
 
