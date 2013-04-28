@@ -1,4 +1,6 @@
 import pygame
+from pygame.locals import *
+
 import game
 import game.util as u
 import game.constants as c
@@ -14,11 +16,12 @@ fish_frames = [pygame.image.load("data/images/fish_{}.png".format(i)) for i in r
 
 class Fish(game.PhysicsEntity):
 
-    def __init__(self, swarm, position=m.Vector(0, 0), direction=m.Vector(0, 0)):
+    def __init__(self, swarm, position=m.Vector(0, 0), direction=m.Vector(0, 0), color=[255, 255, 255]):
         super(Fish, self).__init__(swarm.mode, position, direction, max_velocity=c.FISH_MAX_VELOCITY, max_angular_velocity=c.FISH_MAX_ANGULAR_VELOCITY, velocity_decay=c.FISH_VELOCITY_DECAY, angular_velocity_decay=c.FISH_ANGULAR_VELOCITY_DECAY)
 
         self.swarm = swarm
         self.food = c.FISH_BABY_FOOD
+        self.color = [cl for cl in color]
 
         self.anim_timer = random.uniform(0, len(fish_frames)) * c.FISH_ANIM_DELAY
 
@@ -32,11 +35,11 @@ class Fish(game.PhysicsEntity):
                 self.swarm.fishes.remove(self)
 
         if self.food >= c.FISH_BABY_THRESHOLD:
-            self.modify_food(-c.FISH_BABY_FOOD)
+            self.modify_food(-c.FISH_BABY_COST)
 
             self.mode.fishies_spawned += 1
             self.mode.fishies_max = max(self.mode.fishies_max, len(self.swarm.fishes))
-            self.swarm.fishes.append(Fish(self.swarm, self.position))
+            self.swarm.fishes.append(Fish(self.swarm, self.position, color=self.color))
 
     def apply_force(self):
 
@@ -73,6 +76,11 @@ class Fish(game.PhysicsEntity):
                 closest_food.nutrition_value -= 1
                 self.modify_food(1)
                 self.mode.food_eaten += 1
+
+                color_ratio = 1 / self.food
+
+                for i in range(3):
+                    self.color[i] = (1-color_ratio) * self.color[i] + color_ratio * closest_food.color[i]
 
                 if closest_food.nutrition_value <= 0:
                     self.mode.foods.remove(closest_food)
@@ -118,7 +126,10 @@ class Fish(game.PhysicsEntity):
 
         frame = int(self.anim_timer / c.FISH_ANIM_DELAY)
 
-        sprite_stretch = pygame.transform.rotozoom(fish_frames[frame], -self.angle / math.pi * 180, 0.1 + math.sqrt(self.food / c.FISH_BABY_FOOD))
+        sprite_stretch = pygame.transform.rotozoom(fish_frames[frame], -self.angle / math.pi * 180, 0.1 + math.sqrt(self.food / c.FISH_BABY_COST))
+
+        sprite_stretch.fill(self.color, special_flags=BLEND_MULT)
+
         sprite_dim = m.Vector(sprite_stretch.get_width(), sprite_stretch.get_height())
 
         scr.blit(sprite_stretch, (self.position - cam - sprite_dim / 2).as_tuple())

@@ -154,7 +154,7 @@ class SwimMode(game.Mode):
 
         game.world.render(scr, (0, 0), (self.sector_x, self.sector_y))
 
-        u.draw_line(scr, tl, m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y))
-        u.draw_line(scr, m.Vector(tl.x, tl.y + c.SECTOR_SIZE.y), m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y + c.SECTOR_SIZE.y))
-        u.draw_line(scr, tl, m.Vector(tl.x, tl.y + c.SECTOR_SIZE.y))
-        u.draw_line(scr, m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y), m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y + c.SECTOR_SIZE.y))
+        #u.draw_line(scr, tl, m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y))
+        #u.draw_line(scr, m.Vector(tl.x, tl.y + c.SECTOR_SIZE.y), m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y + c.SECTOR_SIZE.y))
+        #u.draw_line(scr, tl, m.Vector(tl.x, tl.y + c.SECTOR_SIZE.y))
+        #u.draw_line(scr, m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y), m.Vector(tl.x + c.SECTOR_SIZE.x, tl.y + c.SECTOR_SIZE.y))

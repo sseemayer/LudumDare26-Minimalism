@@ -28,12 +28,12 @@ class Predator(game.PhysicsEntity):
         # a) rotate so that we move into direction
 
         preys = [ f for f in self.mode.swarm.fishes if (f.position - self.position).length < c.PREDATOR_SENSES]
+        if self.target:
+            preys.append(self.target)
 
         go_to_prey = u.random_dir() * 10000
-        if not self.target and preys:
+        if preys:
             self.target = sorted(preys, key=lambda p: (p.position - self.position).length_squared)[0]
-
-        if self.target:
             go_to_prey = self.target.position - self.position
 
         neighbors = [ p for p in self.mode.predators if (p.position - self.position).length < c.PREDATOR_REPEL_DISTANCE ]

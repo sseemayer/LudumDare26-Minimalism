@@ -29,9 +29,9 @@ class Camera(game.PhysicsEntity):
 
     def render(self):
         scr = self.mode.game.screen
-        u.draw_text(self.mode.game.screen, m.Vector(80, 0), "Camera: {}".format(self.position))
-        u.draw_text(self.mode.game.screen, m.Vector(80, 20), "Active: {}".format(self.mode.active_sectors))
-        u.draw_text(self.mode.game.screen, m.Vector(80, 40), "Sector: {} {}".format(self.mode.sector_x, self.mode.sector_y))
+        #u.draw_text(self.mode.game.screen, m.Vector(80, 0), "Camera: {}".format(self.position))
+        #u.draw_text(self.mode.game.screen, m.Vector(80, 20), "Active: {}".format(self.mode.active_sectors))
+        #u.draw_text(self.mode.game.screen, m.Vector(80, 40), "Sector: {} {}".format(self.mode.sector_x, self.mode.sector_y))
 
 
         scr.blit(self.cursor, (self.mode.mouse_pos_world - self.position - self.cursor_size / 2).as_tuple())
