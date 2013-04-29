@@ -32,7 +32,7 @@ For running the game from source, you will need:
 
 Once you have all the dependencies, just run the the_migration.py file in the main directory.
 
-#### Special Note for Macintosh Users
+#### Special Note for Macintosh Users (thanks @irskep!)
 
 In order to access the 32-bit pygame libraries, you might need to run the game using
 
