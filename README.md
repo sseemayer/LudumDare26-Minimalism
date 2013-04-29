@@ -46,7 +46,8 @@ The code and content for Migration is under the MIT license. The libraries used 
   * ArchLinux, AwesomeWM, vim, git
   * python, pygame, PyHiero, Py2D, py2exe, pygame2exe
   * GIMP, Inkscape
-  * Wacom Intous 3
+  * Wacom Intuos 3
+  * inudge, bfxr, Audacity
   * glapse, gtk-recordMyDesktop
 
 ## Thanks
