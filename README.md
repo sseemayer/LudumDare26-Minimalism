@@ -32,6 +32,11 @@ For running the game from source, you will need:
 
 Once you have all the dependencies, just run the the_migration.py file in the main directory.
 
+#### Special Note for Macintosh Users
+
+In order to access the 32-bit pygame libraries, you might need to run the game using
+
+	$ arch -i386 python the_migration.py
 
 ## License
 The code and content for Migration is under the MIT license. The libraries used may have different licenses
